@@ -26,4 +26,13 @@ public class Alert {
     public Stock stock;
     @ManyToOne
     private User user;
+
+    public Alert(Long id, Condition condition, Double value, Boolean istrue, Stock s, User u){
+        this.id = id;
+        this.condition = condition;
+        this.value = value;
+        this.isTrue = istrue;
+        this.stock = s;
+        this.user = u;
+    }
 }
