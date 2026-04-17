@@ -45,10 +45,6 @@ public class MyController {
         return stockService.findById(symbol);
     }
 
-    @PostMapping("/stocks")
-    public void createStock(@PathVariable Stock stock){
-        stockService.createStock(stock);
-    }
 
     // Add stock to watchlist
     @PostMapping("/watchlist")
@@ -62,9 +58,9 @@ public class MyController {
         alertService.createAlert(alert);
     }
 
-    @PostMapping("/users"){
+    @PostMapping("/users")
         public void createUser(@RequestBody User u){
             UserService.createUser(u);
         }
     }
-}
+
