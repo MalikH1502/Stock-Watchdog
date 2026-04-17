@@ -23,7 +23,7 @@ public class Alert {
     private Double value;
     private Boolean isTrue;
     @ManyToOne
-    public Stock stock;
+    private Stock stock;
     @ManyToOne
     private User user;
 
