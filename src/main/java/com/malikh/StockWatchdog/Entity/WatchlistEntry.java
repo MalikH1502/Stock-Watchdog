@@ -29,4 +29,6 @@ public class WatchlistEntry {
     private Stock stock;
 
     private LocalDate dateAdded;
+    
 }
+
