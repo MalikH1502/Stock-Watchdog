@@ -13,13 +13,27 @@ import com.malikh.StockWatchdog.Repository.StockRepository;
 public class StockService {
     @Autowired
     public StockRepository stockRepo;
-
+    // CRUD
+    // Create
+    public void createStock(Stock s){
+        stockRepo.save(s);
+    }
+    //READ
     public List<Stock> getAllStocks(){
         return stockRepo.findAll();
     }
-
+    
     public Optional<Stock> findById(String s){
         return stockRepo.findById(s);
+    }
+    //UPDATE
+    public void updateStock(String s, Stock st){
+        st.setSymbol(s);
+        stockRepo.save(st);
+    }
+    //DELETE
+    public void deleteStock(String s){
+        stockRepo.deleteById(s);
     }
 
 }
