@@ -1,5 +1,7 @@
 package com.malikh.StockWatchdog.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,21 +10,39 @@ import com.malikh.StockWatchdog.Repository.AlertRepository;
 
 @Service
 public class AlertService {
-    @Autowired
-    private AlertRepository alertRepo;
-// Create
-    public void createAlert(Alert a){
-        alertRepo.save(a);
+    private final AlertRepository alertRepo;
+
+    public AlertService(AlertRepository alertRepo) {
+        this.alertRepo = alertRepo;
     }
-// Read
-    public List<Alert> getAllAlerts(AlertRepository a){
-        return a.findAll();
+
+    // Create
+    public Alert createAlert(Alert a) {
+        return alertRepo.save(a);
     }
-// Update
-    public void updateAlert(){        
+
+    // Read
+    public List<Alert> getAllAlerts() {
+        return alertRepo.findAll();
     }
-// Delete
-    public void deleteAlert(Long id){
+
+    // Update
+    public Alert updateAlert(Long id, Alert updatedAlert) {
+        Alert existingAlert = alertRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+
+        existingAlert.setStock(updatedAlert.getStock());
+        existingAlert.setTargetPrice(updatedAlert.getValue());
+
+        return alertRepo.save(updatedAlert);
+    }
+
+    // Delete
+    public void deleteAlert(Long id) {
+        if (!alertRepo.existsById(id)) {
+            throw new RuntimeException("Alert not found with id: " + id);
+        }
+
         alertRepo.deleteById(id);
     }
 }
