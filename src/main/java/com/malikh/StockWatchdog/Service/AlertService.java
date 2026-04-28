@@ -10,9 +10,19 @@ import com.malikh.StockWatchdog.Repository.AlertRepository;
 public class AlertService {
     @Autowired
     private AlertRepository alertRepo;
-
+// Create
     public void createAlert(Alert a){
         alertRepo.save(a);
     }
-
+// Read
+    public List<Alert> getAllAlerts(AlertRepository a){
+        return a.findAll();
+    }
+// Update
+    public void updateAlert(){        
+    }
+// Delete
+    public void deleteAlert(Long id){
+        alertRepo.deleteById(id);
+    }
 }
