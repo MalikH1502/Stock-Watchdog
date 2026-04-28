@@ -35,4 +35,5 @@ public class Alert {
         this.stock = s;
         this.user = u;
     }
+
 }
