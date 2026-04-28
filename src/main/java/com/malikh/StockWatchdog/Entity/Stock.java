@@ -11,5 +11,6 @@ public class Stock {
     private String symbol;
     private String companyName;
     private Boolean isUpdated;
+    private Double price;
 
 }
