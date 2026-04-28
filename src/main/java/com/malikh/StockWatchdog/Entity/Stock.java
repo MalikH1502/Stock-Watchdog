@@ -10,7 +10,6 @@ public class Stock {
     @Id
     private String symbol;
     private String companyName;
-
     private Boolean isUpdated;
 
 }
