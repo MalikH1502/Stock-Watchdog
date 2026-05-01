@@ -1,11 +1,9 @@
 # 📈 StockWatchdog
-
 A Spring Boot REST API for monitoring stocks, managing watchlists, and setting price alerts.
 
 ---
 
 ## Features
-
 - View and manage a list of tracked stocks
 - Add stocks to a personal watchlist
 - Create price alerts (trigger when a stock goes above or below a target value)
@@ -15,7 +13,6 @@ A Spring Boot REST API for monitoring stocks, managing watchlists, and setting p
 ---
 
 ## Tech Stack
-
 | Layer | Technology |
 |---|---|
 | Language | Java |
@@ -27,27 +24,38 @@ A Spring Boot REST API for monitoring stocks, managing watchlists, and setting p
 ---
 
 ## Project Structure
-
 ```
 src/main/java/com/malikh/StockWatchdog/
 │
-├── Controllers/
-│   └── MyController.java        # REST endpoints
+├── controller/
+│   └── MyController.java          # REST endpoints
 │
-├── Entity/
-│   ├── Alert.java               # Price alert with ABOVE/BELOW condition
-│   ├── History.java             # Historical price record for a stock
-│   ├── Stock.java               # Stock symbol + company name
-│   ├── User.java                # Application user
-│   └── WatchlistEntry.java      # Many-to-many join: User <-> Stock
+├── dto/
+│   ├── AlertDTO.java              # Alert response object (no sensitive fields)
+│   ├── StockDTO.java              # Stock response object
+│   ├── UserDTO.java               # User response object (no password)
+│   └── WatchlistEntryDTO.java     # Watchlist response object
 │
-├── Repository/
+├── mapper/
+│   ├── AlertMapper.java           # Maps Alert entity to AlertDTO
+│   ├── StockMapper.java           # Maps Stock entity to StockDTO
+│   ├── UserMapper.java            # Maps User entity to UserDTO
+│   └── WatchlistEntryMapper.java  # Maps WatchlistEntry entity to WatchlistEntryDTO
+│
+├── entity/
+│   ├── Alert.java                 # Price alert with ABOVE/BELOW condition
+│   ├── History.java               # Historical price record for a stock
+│   ├── Stock.java                 # Stock symbol + company name
+│   ├── User.java                  # Application user
+│   └── WatchlistEntry.java        # Many-to-many join: User <-> Stock
+│
+├── repository/
 │   ├── AlertRepository.java
 │   ├── StockRepository.java
 │   ├── UserRepository.java
 │   └── WatchlistRepository.java
 │
-├── Service/
+├── service/
 │   ├── AlertService.java
 │   ├── StockService.java
 │   ├── UserService.java
@@ -59,7 +67,6 @@ src/main/java/com/malikh/StockWatchdog/
 ---
 
 ## API Endpoints
-
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/api/stocks` | Get all stocks |
@@ -72,7 +79,6 @@ src/main/java/com/malikh/StockWatchdog/
 ---
 
 ## Data Model Overview
-
 ```
 User ──< WatchlistEntry >── Stock
  │                            │
@@ -80,7 +86,6 @@ User ──< WatchlistEntry >── Stock
                    │
                 History
 ```
-
 - A **User** can have many **WatchlistEntries** and many **Alerts**
 - A **Stock** can appear in many watchlists and have many alerts and history records
 - An **Alert** fires when a stock's price goes `ABOVE` or `BELOW` a set value
@@ -90,21 +95,17 @@ User ──< WatchlistEntry >── Stock
 ## Getting Started
 
 ### Prerequisites
-
 - Java 17+
 - Maven
 - A running database (configure in `application.properties`)
 
 ### Run
-
 ```bash
 mvn spring-boot:run
 ```
 
 ### Configuration
-
 Edit `src/main/resources/application.properties` to set your database connection:
-
 ```properties
 spring.datasource.url=jdbc:your-db-url
 spring.datasource.username=your-username
@@ -115,8 +116,7 @@ spring.jpa.hibernate.ddl-auto=update
 ---
 
 ## Known Limitations / TODO
-
-- [ ] No authentication/authorization (passwords stored in plain text)
+- [ ] No authentication or authorization
 - [ ] No input validation on endpoints
 - [ ] Alert evaluation logic not yet implemented
 - [ ] History population requires an external data source integration
