@@ -1,29 +1,37 @@
 package com.malikh.stockwatchdog.service;
 
+import com.mapper.AlertMapper;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.malikh.stockwatchdog.dto.AlertDTO;
 import com.malikh.stockwatchdog.entity.Alert;
 import com.malikh.stockwatchdog.repository.AlertRepository;
 
 @Service
 public class AlertService {
+    private final AlertMapper alertMapper;
     private final AlertRepository alertRepo;
 
-    public AlertService(AlertRepository alertRepo) {
+    public AlertService(AlertRepository alertRepo, AlertMapper alertMapper) {
         this.alertRepo = alertRepo;
+        this.alertMapper = alertMapper;
     }
 
     // Create
-    public Alert createAlert(Alert a) {
-        return alertRepo.save(a);
+    public AlertDTO createAlert(Alert a) {
+        Alert savedAlert = alertRepo.save(a);
+        return alertMapper.toDTO(savedAlert);
     }
 
     // Read
-    public List<Alert> getAllAlerts() {
-        return alertRepo.findAll();
+    public List<AlertDTO> getAllAlerts() {
+        return alertRepo.findAll().stream()
+                .map(alertMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     // Update
@@ -34,7 +42,7 @@ public class AlertService {
         existingAlert.setStock(updatedAlert.getStock());
         existingAlert.setValue(updatedAlert.getValue());
         Alert savedAlert = alertRepo.save(existingAlert);
-        return toDTO(savedAlert);
+        return alertMapper.toDTO(savedAlert);
     }
 
     // Delete
