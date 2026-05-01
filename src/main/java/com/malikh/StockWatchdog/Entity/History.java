@@ -1,4 +1,4 @@
-package com.malikh.StockWatchdog.Entity;
+package com.malikh.stockwatchdog.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

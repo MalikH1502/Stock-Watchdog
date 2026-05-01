@@ -1,4 +1,4 @@
-package com.malikh.StockWatchdog.Entity;
+package com.malikh.stockwatchdog.entity;
 
 import java.time.LocalDate;
 

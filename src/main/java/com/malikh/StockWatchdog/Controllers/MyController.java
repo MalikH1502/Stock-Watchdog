@@ -1,16 +1,7 @@
-package com.malikh.StockWatchdog.Controllers;
+package com.malikh.stockwatchdog.controllers;
 
 import java.util.List;
 import java.util.Optional;
-
-import com.malikh.StockWatchdog.Entity.*;
-import com.malikh.StockWatchdog.Repository.AlertRepository;
-import com.malikh.StockWatchdog.Repository.StockRepository;
-import com.malikh.StockWatchdog.Repository.WatchlistRepository;
-import com.malikh.StockWatchdog.Service.AlertService;
-import com.malikh.StockWatchdog.Service.StockService;
-import com.malikh.StockWatchdog.Service.UserService;
-import com.malikh.StockWatchdog.Service.WatchlistService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +12,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.malikh.stockwatchdog.repository.UserRepository;
+import com.malikh.stockwatchdog.entity.Alert;
+import com.malikh.stockwatchdog.entity.Stock;
+import com.malikh.stockwatchdog.entity.User;
+import com.malikh.stockwatchdog.entity.Stock;
+import com.malikh.stockwatchdog.entity.WatchlistEntry;
+import com.malikh.stockwatchdog.repository.AlertRepository;
+import com.malikh.stockwatchdog.repository.StockRepository;
+import com.malikh.stockwatchdog.repository.WatchlistRepository;
+import com.malikh.stockwatchdog.service.AlertService;
+import com.malikh.stockwatchdog.service.StockService;
+import com.malikh.stockwatchdog.service.UserService;
+import com.malikh.stockwatchdog.service.WatchlistService;
 
 @RestController
 @RequestMapping("/api")
