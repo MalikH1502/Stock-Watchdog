@@ -1,4 +1,4 @@
-package com.malikh.StockWatchdog.Service;
+package com.malikh.stockwatchdog.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +8,8 @@ import javax.management.RuntimeErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.malikh.StockWatchdog.Entity.Stock;
-import com.malikh.StockWatchdog.Repository.StockRepository;
+import com.malikh.stockwatchdog.entity.Stock;
+import com.malikh.stockwatchdog.repository.StockRepository;
 
 @Service
 public class StockService {

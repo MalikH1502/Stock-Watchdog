@@ -1,10 +1,10 @@
-package com.malikh.StockWatchdog.Service;
+package com.malikh.stockwatchdog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.malikh.StockWatchdog.Entity.WatchlistEntry;
-import com.malikh.StockWatchdog.Repository.WatchlistRepository;
+import com.malikh.stockwatchdog.entity.WatchlistEntry;
+import com.malikh.stockwatchdog.repository.WatchlistRepository;
 
 @Service
 public class WatchlistService {

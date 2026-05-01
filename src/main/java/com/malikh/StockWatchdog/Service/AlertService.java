@@ -1,12 +1,12 @@
-package com.malikh.StockWatchdog.Service;
+package com.malikh.stockwatchdog.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.malikh.StockWatchdog.Entity.Alert;
-import com.malikh.StockWatchdog.Repository.AlertRepository;
+import com.malikh.stockwatchdog.entity.Alert;
+import com.malikh.stockwatchdog.repository.AlertRepository;
 
 @Service
 public class AlertService {
@@ -27,14 +27,14 @@ public class AlertService {
     }
 
     // Update
-    public Alert updateAlert(Long id, Alert updatedAlert) {
+    public AlertDTO updateAlert(Long id, Alert updatedAlert) {
         Alert existingAlert = alertRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
 
         existingAlert.setStock(updatedAlert.getStock());
-        existingAlert.setTargetPrice(updatedAlert.getValue());
-
-        return alertRepo.save(updatedAlert);
+        existingAlert.setValue(updatedAlert.getValue());
+        Alert savedAlert = alertRepo.save(existingAlert);
+        return toDTO(savedAlert);
     }
 
     // Delete
