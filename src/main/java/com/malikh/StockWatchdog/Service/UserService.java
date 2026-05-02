@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.malikh.stockwatchdog.dto.UserDTO;
 import com.malikh.stockwatchdog.entity.User;
+import com.malikh.stockwatchdog.mapper.UserMapper;
 import com.malikh.stockwatchdog.repository.UserRepository;
-import com.mapper.UserMapper;
 
 @Service
 public class UserService {

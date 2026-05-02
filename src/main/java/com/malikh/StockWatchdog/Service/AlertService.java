@@ -1,6 +1,5 @@
 package com.malikh.stockwatchdog.service;
 
-import com.mapper.AlertMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.malikh.stockwatchdog.dto.AlertDTO;
 import com.malikh.stockwatchdog.entity.Alert;
+import com.malikh.stockwatchdog.mapper.AlertMapper;
 import com.malikh.stockwatchdog.repository.AlertRepository;
 
 @Service

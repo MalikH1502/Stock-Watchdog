@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.malikh.stockwatchdog.dto.StockDTO;
 import com.malikh.stockwatchdog.entity.Stock;
+import com.malikh.stockwatchdog.mapper.StockMapper;
 import com.malikh.stockwatchdog.repository.StockRepository;
-import com.mapper.StockMapper;
 
 @Service
 public class StockService {
@@ -36,11 +36,11 @@ public class StockService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<StockDTO> findById(String s){
+    public Optional<StockDTO> findById(Long s){
         return stockRepo.findById(s).map(stockMapper::toDTO);
     }
     //UPDATE
-    public StockDTO updateStock(String s, Stock updatedStock){
+    public StockDTO updateStock(Long s, Stock updatedStock){
         Stock existingStock = stockRepo.findById(s)
                 .orElseThrow(() -> new RuntimeException("Stock not found"));
         existingStock.setCompanyName(updatedStock.getCompanyName());
@@ -48,7 +48,7 @@ public class StockService {
         return stockMapper.toDTO(stockRepo.save(existingStock));
     }
     //DELETE
-    public void deleteStock(String s){
+    public void deleteStock(Long s){
         if (!stockRepo.existsById(s)) {
             throw new RuntimeException("Stock not found");
         }
