@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.malikh.stockwatchdog.entity.Stock;
 
 @Repository
-public interface StockRepository extends JpaRepository<Stock, String> {
+public interface StockRepository extends JpaRepository<Stock, Long> {
     
 }
