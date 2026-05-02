@@ -67,7 +67,7 @@ body{
 
 }
 .card h3{
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     margin-top: 5px;
     font-size: small;
     color: #4a4343;
