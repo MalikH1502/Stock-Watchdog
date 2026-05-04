@@ -38,6 +38,7 @@ public class UserService {
 
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setEmail(updatedUser.getEmail());
 
         return userMapper.toDTO(userRepo.save(existingUser));
     }
