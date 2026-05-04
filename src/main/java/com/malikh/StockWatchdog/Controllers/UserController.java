@@ -17,9 +17,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    
+
     @PostMapping("/users")
         public void createUser(@RequestBody User u){
             userService.createUser(u);
         }
+
+    @PostMapping("/signup")
+    public String registerUser(@RequestBody String username, @RequestBody String password, @RequestBody String email) {
+        userService.createUser(username,password,email);
+        
+        return entity;
+    }
+    
 }
