@@ -1,21 +1,38 @@
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset = "UTF-8">
-    <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel = "stylesheet" href = "./signup.css">
+    <link rel="stylesheet" href="./signup.css">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 </head>
 
 <body>
     <div class="signup_container">
         <h1>Create Account</h1>
-        <form action="/signup" method="post">
+        <form action="./signup.html" method="post">
             <input type="text" name="username" placeholder="Enter Username.." required>
             <input type="email" name="email" placeholder="Enter Email.." required>
             <input type="password" name="password" placeholder="Enter Password.." required>
+            <input type="password" name="confirmpassword" placeholder="Confirm Password.." required>
+            <span id="pw-error" style="color:red; font-size:small;"></span>
             <button type="submit">Sign Up</button>
         </form>
     </div>
+    <script>
+        const password = document.querySelector('input[name="password"]');
+        const confirm = document.querySelector('input[name="confirmpassword"]');
+
+        confirm.addEventListener("input", () => {
+            const error = document.getElementById("pw-error");
+            if (confirm.value && password.value !== confirm.value) {
+                error.textContent = "Passwords do not match.";
+                confirm.setCustomValidity("Passwords do not match.");
+            } else {
+                error.textContent = "";
+                confirm.setCustomValidity("");
+            }
+        });
+    </script>
 </body>
 </html>
