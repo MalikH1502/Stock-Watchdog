@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.malikh.stockwatchdog.dto.LoginRequest;
 import com.malikh.stockwatchdog.dto.UserDTO;
+import com.malikh.stockwatchdog.dto.UserRegistrationRequest;
 import com.malikh.stockwatchdog.entity.User;
 import com.malikh.stockwatchdog.mapper.UserMapper;
 import com.malikh.stockwatchdog.repository.UserRepository;
@@ -16,14 +19,21 @@ public class UserService {
     
     private final UserRepository userRepo;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepo, UserMapper userMapper){
+    public UserService(UserRepository userRepo, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUser(User u){
-        userRepo.save(u);
+    public UserDTO createUser(UserRegistrationRequest request){
+        User u = new User();
+        u.setUsername(request.getUsername());
+        u.setPassword(passwordEncoder.encode(request.getPassword()));
+        u.setEmail(request.getEmail());
+
+        return userMapper.toDTO(userRepo.save(u));
     }
 
     public List<UserDTO> getAllUsers(){
@@ -32,12 +42,23 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public UserDTO login(LoginRequest request) {
+        User user = userRepo.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Username or password incorrect"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Username or password incorrect");
+        }
+
+        return userMapper.toDTO(user);
+    }
+
     public UserDTO updateUser(Long id, User updatedUser){
         User existingUser = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
         existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         existingUser.setEmail(updatedUser.getEmail());
 
         return userMapper.toDTO(userRepo.save(existingUser));
