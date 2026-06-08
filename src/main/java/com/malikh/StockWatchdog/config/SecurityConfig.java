@@ -1,4 +1,4 @@
-package com.malikh.stockwatchdog.service;
+package com.malikh.stockwatchdog.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
