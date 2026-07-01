@@ -1,7 +1,6 @@
 package com.malikh.stockwatchdog.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,14 +21,9 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@Valid @RequestBody UserRegistrationRequest request) {
+    public ResponseEntity<?> register(@Valid UserRegistrationRequest request) {
         userService.createUser(request);
         return ResponseEntity.ok("User registered successfully");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
-        UserDTO user = userService.login(request);
-        return ResponseEntity.ok(user);
-    }
 }

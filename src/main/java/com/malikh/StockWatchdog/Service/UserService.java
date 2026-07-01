@@ -1,6 +1,7 @@
 package com.malikh.stockwatchdog.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +41,6 @@ public class UserService {
         return userRepo.findAll().stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    public UserDTO login(LoginRequest request) {
-        User user = userRepo.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Username or password incorrect"));
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Username or password incorrect");
-        }
-
-        return userMapper.toDTO(user);
     }
 
     public UserDTO updateUser(Long id, User updatedUser){
