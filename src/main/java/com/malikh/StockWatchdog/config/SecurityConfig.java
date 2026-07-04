@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -17,28 +18,32 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String LOGIN_PAGE = "/login.html";
+    private static final String SIGNUP_PAGE = "/signup.html";
+    private static final String API_LOGIN = "/api/login";
+    private static final String API_SIGNUP = "/api/signup";
+    private static final String API_CSRF = "/api/csrf";
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/login", "/api/signup")
-            )
+            .csrf(csrf -> { })
 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/login.html", "/signup.html",
+                    LOGIN_PAGE, SIGNUP_PAGE,
                     "/login.css", "/signup.css",
-                    "/*.js", "/api/login", "/api/signup"
+                    "/*.js", API_LOGIN, API_SIGNUP, API_CSRF
                 ).permitAll()
                 .anyRequest().authenticated()
             )
 
             .formLogin(form -> form
-                .loginPage("/login.html")
-                .loginProcessingUrl("/api/login")
+                .loginPage(LOGIN_PAGE)
+                .loginProcessingUrl(API_LOGIN)
                 .defaultSuccessUrl("/index.html", true)
-                .failureUrl("/login.html?error=true")
+                .failureUrl(LOGIN_PAGE + "?error=true")
                 .permitAll()
             )
            
@@ -47,7 +52,7 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/login.html")
+                .logoutSuccessUrl(LOGIN_PAGE)
                 .permitAll()
             )
 
@@ -74,6 +79,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public RestClient.Builder restClientBuilder() {
+        return RestClient.builder();
     }
     
 }
