@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang = "en">
 <head>
     <meta charset = "UTF-8">
@@ -14,19 +15,36 @@
             Invalid username or password.
         </div>
         <form action="/api/login" method="post">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="hidden" name="_csrf" id="login-csrf-token">
+            <label for="login-username" class="sr-only">Username</label>
+            <input type="text" id="login-username" name="username" placeholder="Username" required>
+            <label for="login-password" class="sr-only">Password</label>
+            <input type="password" id="login-password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
     </div>
     <p class="signup-link">Don't have an account? <a href="./signup.html">Sign up</a></p>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
+    <script type="module">
+        const params = new URLSearchParams(globalThis.location.search);
         const errorBanner = document.getElementById('login-error');
+        const csrfInput = document.getElementById('login-csrf-token');
 
         if (params.has('error')) {
             errorBanner.hidden = false;
+        }
+
+        try {
+            const response = await fetch('/api/csrf');
+            const tokenData = await response.json();
+
+            if (csrfInput) {
+                csrfInput.value = tokenData.token;
+            }
+        } catch {
+            if (csrfInput) {
+                csrfInput.value = '';
+            }
         }
     </script>
 </body>

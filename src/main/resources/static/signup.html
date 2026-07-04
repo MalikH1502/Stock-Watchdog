@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,17 +12,36 @@
     <div class="signup_container">
         <h1>Create Account</h1>
         <form action="/api/signup" method="post">
-            <input type="text" name="username" placeholder="Enter Username.." required>
-            <input type="email" name="email" placeholder="Enter Email.." required>
-            <input type="password" name="password" placeholder="Enter Password.." required>
-            <input type="password" name="confirmpassword" placeholder="Confirm Password.." required>
+            <input type="hidden" name="_csrf" id="signup-csrf-token">
+            <label for="signup-username" class="sr-only">Username</label>
+            <input type="text" id="signup-username" name="username" placeholder="Enter Username.." required>
+            <label for="signup-email" class="sr-only">Email</label>
+            <input type="email" id="signup-email" name="email" placeholder="Enter Email.." required>
+            <label for="signup-password" class="sr-only">Password</label>
+            <input type="password" id="signup-password" name="password" placeholder="Enter Password.." required>
+            <label for="signup-confirm-password" class="sr-only">Confirm Password</label>
+            <input type="password" id="signup-confirm-password" name="confirmpassword" placeholder="Confirm Password.." required>
             <span id="pw-error" style="color:red; font-size:small;"></span>
             <button type="submit">Sign Up</button>
         </form>
     </div>
-    <script>
+    <script type="module">
         const password = document.querySelector('input[name="password"]');
         const confirm = document.querySelector('input[name="confirmpassword"]');
+        const csrfInput = document.getElementById('signup-csrf-token');
+
+        try {
+            const response = await fetch('/api/csrf');
+            const tokenData = await response.json();
+
+            if (csrfInput) {
+                csrfInput.value = tokenData.token;
+            }
+        } catch {
+            if (csrfInput) {
+                csrfInput.value = '';
+            }
+        }
 
         confirm.addEventListener("input", () => {
             const error = document.getElementById("pw-error");
