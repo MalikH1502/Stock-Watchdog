@@ -1,22 +1,18 @@
-const stockForm = document.getElementById("searchForm");
+const stockForm = document.getElementById("search-form");
 const resultsContainer = document.getElementById("results-container");
 
 if (stockForm) {
     stockForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-
-        const payload = {
-            symbol: formData.get("symbol"),
-        };
+        const searchParams = new URLSearchParams({query: formData.get("symbol")});
+        const url = `http://localhost:8080/api/stocks/search?${searchParams}`;
 
         resultsContainer.innerHTML = "<p>Loading...<p>";
 
         try{
-        const response = await fetch("http://localhost:8080/api/stocks", {
+        const response = await fetch(url, {
             method: "GET",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
         });
 
         const data = await response.json();

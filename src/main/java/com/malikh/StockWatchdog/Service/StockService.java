@@ -14,6 +14,7 @@ import com.malikh.stockwatchdog.entity.Stock;
 import com.malikh.stockwatchdog.mapper.StockMapper;
 import com.malikh.stockwatchdog.repository.StockRepository;
 
+
 @Service
 public class StockService {
     private final StockRepository stockRepo;
