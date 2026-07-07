@@ -1,5 +1,7 @@
 package com.malikh.stockwatchdog.entity;
 
+import java.time.Instant;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,5 +18,6 @@ public class Stock {
     private String companyName;
     private Boolean isUpdated;
     private Double price;
+    private Instant lastUpdated;
 
 }
