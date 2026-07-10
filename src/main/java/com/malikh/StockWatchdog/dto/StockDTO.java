@@ -10,5 +10,7 @@ public class StockDTO{
     private String symbol;
     private String companyName;
     private Double price;
+    private String region;
+    private String type;
 
 }
