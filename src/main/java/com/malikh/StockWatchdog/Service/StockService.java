@@ -1,5 +1,6 @@
 package com.malikh.stockwatchdog.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import javax.management.RuntimeErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.malikh.stockwatchdog.dto.AlphaVantageMatch;
 import com.malikh.stockwatchdog.dto.StockDTO;
 import com.malikh.stockwatchdog.entity.Stock;
 import com.malikh.stockwatchdog.mapper.StockMapper;
@@ -19,10 +21,30 @@ import com.malikh.stockwatchdog.repository.StockRepository;
 public class StockService {
     private final StockRepository stockRepo;
     private final StockMapper stockMapper;
+    private final AlphaVantageService alphaVantageService;
 
-    public StockService(StockRepository stockRepo, StockMapper stockMapper) {
+    public StockService(StockRepository stockRepo, StockMapper stockMapper, AlphaVantageService alphaVantageService) {
         this.stockRepo = stockRepo;
         this.stockMapper = stockMapper;
+        this.alphaVantageService = alphaVantageService;
+    }
+
+    public List<StockDTO> upsertStock(String symbol){
+        List<AlphaVantageMatch> matches = alphaVantageService.searchSymbol(symbol);
+        List<StockDTO> results = new ArrayList<StockDTO>();
+        for (int i=0;   i<matches.size(); i++){
+            if (stockRepo.findStockBySymbol(matches.get(i).getSymbol()).isEmpty()){
+                Stock s = new Stock();
+                s.setSymbol(matches.get(i).getSymbol());
+                s.setCompanyName(matches.get(i).getName());
+                s.setType(matches.get(i).getType());
+                s.setRegion(matches.get(i).getRegion());
+                stockRepo.save(s);
+                results.add(stockMapper.toDTO(s));
+            }
+            
+        } return results;
+
     }
 
     // CRUD
