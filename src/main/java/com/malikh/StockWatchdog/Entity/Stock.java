@@ -19,5 +19,7 @@ public class Stock {
     private Boolean isUpdated;
     private Double price;
     private Instant lastUpdated;
+    private String region;
+    private String type;
 
 }
