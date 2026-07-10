@@ -33,7 +33,8 @@ public class StockService {
         List<AlphaVantageMatch> matches = alphaVantageService.searchSymbol(symbol);
         List<StockDTO> results = new ArrayList<StockDTO>();
         for (int i=0;   i<matches.size(); i++){
-            if (stockRepo.findStockBySymbol(matches.get(i).getSymbol()).isEmpty()){
+            Optional<Stock> existing = stockRepo.findStockBySymbol(matches.get(i).getSymbol());
+            if (existing.isEmpty()){
                 Stock s = new Stock();
                 s.setSymbol(matches.get(i).getSymbol());
                 s.setCompanyName(matches.get(i).getName());
@@ -42,10 +43,12 @@ public class StockService {
                 stockRepo.save(s);
                 results.add(stockMapper.toDTO(s));
             }
-            
-        } return results;
+        else {
+            results.add(stockMapper.toDTO(existing.get()));
 
-    }
+        }
+
+    } return results;}
 
     // CRUD
     // Create
