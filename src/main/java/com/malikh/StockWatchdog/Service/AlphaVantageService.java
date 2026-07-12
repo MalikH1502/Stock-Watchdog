@@ -24,6 +24,7 @@ public class AlphaVantageService {
     private String apiKey;
 
     public AlphaVantageService(RestClient.Builder restClientBuilder) {
+        this.restClientBuilder = restClientBuilder;
         this.restClient = restClientBuilder.baseUrl("https://www.alphavantage.co").build();
     }
 

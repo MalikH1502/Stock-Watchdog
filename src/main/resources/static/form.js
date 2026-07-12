@@ -5,7 +5,7 @@ if (stockForm) {
     stockForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        const searchParams = new URLSearchParams({query: formData.get("symbol")});
+        const searchParams = new URLSearchParams({query: formData.get("stock")});
         const url = `http://localhost:8080/api/stocks/search?${searchParams}`;
 
         resultsContainer.innerHTML = "<p>Loading...<p>";
