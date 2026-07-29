@@ -101,3 +101,82 @@ html, body{
 .sidebar .tab-container li:hover{
     background-color:#2a2a2a;
 }
+:root{
+    --surface: #131313;
+    --surface-high: #2a2a2a;
+    --surface-highest: #353534;
+    --border: #2a2a2a;
+    --text: #e5e2e1;
+    --text-muted: #d0c9c9;
+    --text-dim: #9a9a9a;
+    --primary: #6f98c7;
+    --positive: #4edea3;
+    --negative: #ff8a80;
+    --radius-sm: 4px;
+    --radius: 6px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --font-mono: "JetBrains Mono", monospace;
+}
+
+.main-content{
+    position: fixed;
+    top: 64px;
+    left: 20vw;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: var(--space-lg);
+    box-sizing: border-box;
+}
+
+#results-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-md);
+}
+
+.stock-card{
+    background: var(--surface-high);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    transition: border-color 0.2s ease;
+}
+
+.stock-card:hover{
+    border-color: var(--primary);
+}
+
+.stock-card .symbol{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.stock-card .company-name{
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.stock-card .meta{
+    display: flex;
+    gap: 8px;
+}
+
+.stock-card .badge{
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+}

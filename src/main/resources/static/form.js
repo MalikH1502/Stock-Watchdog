@@ -20,10 +20,14 @@ if (stockForm) {
 
         if(Array.isArray(data)){
             const htmlList = data.map(stock => `
-                <div class="stock-row">
-                    <span class="symbol">${stock.symbol}</span>
-                    <span class="price">$${stock.price}</span>
-                </div>
+    <div class="stock-card">
+        <span class="symbol">${stock.symbol}</span>
+        <span class="company-name">${stock.companyName ?? ''}</span>
+        <div class="meta">
+            <span class="badge">${stock.type ?? ''}</span>
+            <span class="badge">${stock.region ?? ''}</span>
+        </div>
+    </div>
 `).join('');
 
                 resultsContainer.innerHTML = htmlList;

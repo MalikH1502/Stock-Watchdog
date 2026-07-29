@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang = "en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <meta charset = "UTF-8">
     <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -33,16 +34,16 @@
             
         </div>
     </div>
-    <div class = "topbar">
-        <h1>test</h1>
-        <form id="search-form" action="/api/stocks" method="get">
-            <label for="stock-search">Search symbols</label>
-            <input type="search" id="stock-search" name="stock" placeholder="Search symbols..">
-            <span id="search-error" style="color:red; font-size:small;"></span>
-        </form>
-        <div id="results-container">
-
-        </div>
-    </div>
+    <div class="topbar">
+    <h1>Dashboard</h1>
+    <form id="search-form" action="/api/stocks" method="get">
+        <label for="stock-search">Search symbols</label>
+        <input type="search" id="stock-search" name="stock" placeholder="Search symbols..">
+        <span id="search-error" style="color:red; font-size:small;"></span>
+    </form>
+</div>
+<div class="main-content">
+    <div id="results-container"></div>
+</div>
 </body>
 </html>
