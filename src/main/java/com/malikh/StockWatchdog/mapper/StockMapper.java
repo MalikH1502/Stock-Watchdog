@@ -7,10 +7,13 @@ import com.malikh.stockwatchdog.entity.Stock;
 @Component
 public class StockMapper {
     public StockDTO toDTO(Stock stock) {
-        StockDTO dto = new StockDTO();
-        dto.setId(stock.getId());
-        dto.setSymbol(stock.getSymbol());
-        dto.setPrice(stock.getPrice());
-        return dto;
-    }
+    StockDTO dto = new StockDTO();
+    dto.setId(stock.getId());
+    dto.setSymbol(stock.getSymbol());
+    dto.setPrice(stock.getPrice());
+    dto.setCompanyName(stock.getCompanyName());
+    dto.setType(stock.getType());
+    dto.setRegion(stock.getRegion());
+    return dto;
+}
 }
