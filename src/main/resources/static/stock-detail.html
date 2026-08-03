@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Detail</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="form.js" defer></script>
+    <script src="stock-detail.js" defer></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Stock Watchdog</h2>
+        <h4> User Terminal</h4>
+        <div class="tab-container">
+            <ul>
+                <li class="active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-template-icon lucide-layout-template"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg>
+                    <button type="button" data-page="./index.html">Dashboard</button>
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+                    <button type="button" data-page="./alerts.html">Alerts</button>
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+                    <button type="button" data-page="./settings.html">Settings</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="topbar">
+        <h1>Stock Detail</h1>
+    </div>
+    <div class="main-content">
+        <div class="detail-header">
+            <div>
+                <div class="detail-heading">
+                    <h1 id="detail-symbol">Loading...</h1>
+                    <span class="badge" id="detail-type-badge"></span>
+                </div>
+                <div class="detail-subrow">
+                    <div><span class="label">Region:</span><span id="detail-region"></span></div>
+                </div>
+            </div>
+            <div class="detail-price-block">
+                <div class="detail-price placeholder" id="detail-price">Live price coming soon</div>
+            </div>
+        </div>
+
+        <div class="detail-grid">
+            <div class="panel">
+                <p class="panel-title">Price History</p>
+                <p class="panel-placeholder-text">Charting isn't wired up yet. Planned for a later pass.</p>
+            </div>
+            <div class="panel">
+                <p class="panel-title">Details</p>
+                <div class="detail-facts">
+                    <div>
+                        <div class="detail-fact-label">Company</div>
+                        <div class="detail-fact-value" id="detail-company-name"></div>
+                    </div>
+                    <div>
+                        <div class="detail-fact-label">Symbol</div>
+                        <div class="detail-fact-value" id="detail-symbol-fact"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p id="detail-error" style="color:red; display:none;"></p>
+    </div>
+</body>
+</html>

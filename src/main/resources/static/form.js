@@ -24,15 +24,15 @@ async function performSearch(query) {
 
         if (Array.isArray(data)) {
             const htmlList = data.map(stock => `
-                <div class="stock-card">
-                    <span class="symbol">${stock.symbol}</span>
-                    <span class="company-name">${stock.companyName ?? ''}</span>
-                    <div class="meta">
-                        <span class="badge">${stock.type ?? ''}</span>
-                        <span class="badge">${stock.region ?? ''}</span>
-                    </div>
-                </div>
-            `).join('');
+        <div class="stock-card" data-id="${stock.id}">
+            <span class="symbol">${stock.symbol}</span>
+            <span class="company-name">${stock.companyName ?? ''}</span>
+            <div class="meta">
+                <span class="badge badge-type">${stock.type ?? ''}</span>
+    <span class="badge">${stock.region ?? ''}</span>
+            </div>
+        </div>
+    `).join('');
             resultsContainer.innerHTML = htmlList;
         } else {
             resultsContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
@@ -43,6 +43,7 @@ async function performSearch(query) {
         hideSpinner();
     }
 }
+
 
 if (searchInput) {
     searchInput.addEventListener('input', () => {
@@ -73,6 +74,15 @@ if (searchInput) {
 if (stockForm) {
     stockForm.addEventListener('submit', (event) => {
         event.preventDefault();
+    });
+}
+
+if (resultsContainer) {
+    resultsContainer.addEventListener('click', (event) => {
+        const card = event.target.closest('.stock-card');
+        if (card && card.dataset.id) {
+            window.location.href = `stock-detail.html?id=${card.dataset.id}`;
+        }
     });
 }
 
