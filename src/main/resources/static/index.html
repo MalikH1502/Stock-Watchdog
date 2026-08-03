@@ -37,8 +37,11 @@
     <div class="topbar">
     <h1>Dashboard</h1>
     <form id="search-form" action="/api/stocks" method="get">
+        <div class="search-input-wrapper">
         <label for="stock-search">Search symbols</label>
         <input type="search" id="stock-search" name="stock" placeholder="Search symbols..">
+            <div id="search-spinner" class="spinner"></div>
+</div>
         <span id="search-error" style="color:red; font-size:small;"></span>
     </form>
 </div>

@@ -142,6 +142,9 @@ html, body{
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     transition: border-color 0.2s ease;
 }
 
@@ -152,31 +155,60 @@ html, body{
 .stock-card .symbol{
     font-family: var(--font-mono);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: var(--primary);
-    display: block;
-    margin-bottom: 4px;
+    line-height: 1.2;
 }
 
 .stock-card .company-name{
     color: var(--text-muted);
     font-size: 0.85rem;
-    display: block;
-    margin-bottom: 8px;
+    line-height: 1.35;
+    overflow-wrap: break-word;
 }
 
 .stock-card .meta{
     display: flex;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
 }
 
 .stock-card .badge{
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
     color: var(--text-dim);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 2px 6px;
+    padding: 3px 7px;
+}
+
+.search-input-wrapper{
+    position: relative;
+    display: inline-block;
+}
+
+.spinner{
+    display: none;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    margin-top: -7px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.spinner.active{
+    display: block;
+}
+
+@keyframes spin{
+    to { transform: rotate(360deg); }
 }
