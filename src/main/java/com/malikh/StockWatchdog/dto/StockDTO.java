@@ -1,5 +1,7 @@
 package com.malikh.stockwatchdog.dto;
 
+import java.time.Instant;
+
 import jakarta.persistence.Id;
 import lombok.Data;
 
@@ -12,5 +14,6 @@ public class StockDTO{
     private Double price;
     private String region;
     private String type;
+    private Instant lastUpdated;
 
 }

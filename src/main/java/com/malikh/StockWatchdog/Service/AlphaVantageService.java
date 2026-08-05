@@ -13,6 +13,7 @@ import org.springframework.web.client.RestClient.Builder;
 import com.malikh.stockwatchdog.dto.StockSearchRequest;
 import com.malikh.stockwatchdog.entity.Stock;
 import com.malikh.stockwatchdog.dto.AlphaVantageMatch;
+import com.malikh.stockwatchdog.dto.AlphaVantageQuoteResponse;
 import com.malikh.stockwatchdog.dto.AlphaVantageSearchResponse;
 
 @Service
@@ -26,6 +27,28 @@ public class AlphaVantageService {
     public AlphaVantageService(RestClient.Builder restClientBuilder) {
         this.restClientBuilder = restClientBuilder;
         this.restClient = restClientBuilder.baseUrl("https://www.alphavantage.co").build();
+    }
+
+    public Double getQuotePrice(String symbol) {
+        AlphaVantageQuoteResponse response = restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/query")
+                        .queryParam("function", "GLOBAL_QUOTE")
+                        .queryParam("symbol", symbol)
+                        .queryParam("apikey", apiKey)
+                        .build())
+                .retrieve()
+                .body(AlphaVantageQuoteResponse.class);
+
+        if (response == null || response.getGlobalQuote() == null || response.getGlobalQuote().getPrice() == null) {
+            return null;
+        }
+
+        try {
+            return Double.parseDouble(response.getGlobalQuote().getPrice());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     public List<AlphaVantageMatch> searchSymbol(String symbol) {

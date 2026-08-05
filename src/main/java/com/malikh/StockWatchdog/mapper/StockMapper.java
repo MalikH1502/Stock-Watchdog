@@ -14,6 +14,8 @@ public class StockMapper {
     dto.setCompanyName(stock.getCompanyName());
     dto.setType(stock.getType());
     dto.setRegion(stock.getRegion());
+    dto.setLastUpdated(stock.getLastUpdated());
+
     return dto;
 }
 }
