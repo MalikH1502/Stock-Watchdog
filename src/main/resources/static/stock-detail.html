@@ -6,6 +6,7 @@
     <title>Stock Detail</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="region-flags.js" defer></script>
     <script src="form.js" defer></script>
     <script src="stock-detail.js" defer></script>
 </head>
@@ -30,8 +31,11 @@
         </div>
     </div>
     <div class="topbar">
-        <h1>Stock Detail</h1>
-    </div>
+    <button type="button" id="back-button" class="back-button" aria-label="Back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </button>
+    <h1>Stock Detail</h1>
+</div>
     <div class="main-content">
         <div class="detail-header">
             <div>
@@ -67,6 +71,7 @@
                 </div>
             </div>
         </div>
+        <span class="badge badge-type" id="detail-type-badge"></span>
 
         <p id="detail-error" style="color:red; display:none;"></p>
     </div>

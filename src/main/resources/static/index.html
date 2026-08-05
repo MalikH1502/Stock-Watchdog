@@ -7,7 +7,8 @@
     <title>Document</title>
     <link rel = "stylesheet" href = "./index.css">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <script src = "form.js" defer></script>  
+    <script src="region-flags.js" defer></script>
+    <script src="form.js" defer></script>
 </head>
 <body>
     <div class = "sidebar">
@@ -34,15 +35,13 @@
     <div class="topbar">
     <h1>Dashboard</h1>
     <form id="search-form" action="/api/stocks" method="get">
-        <div class="search-input-wrapper">
         <label for="stock-search">Search symbols</label>
         <input type="search" id="stock-search" name="stock" placeholder="Search symbols..">
-            <div id="search-spinner" class="spinner"></div>
-</div>
         <span id="search-error" style="color:red; font-size:small;"></span>
     </form>
 </div>
 <div class="main-content">
+    <div id="search-spinner" class="content-spinner"></div>
     <div id="results-container"></div>
 </div>
 </body>

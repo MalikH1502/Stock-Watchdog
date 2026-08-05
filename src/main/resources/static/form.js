@@ -8,6 +8,7 @@ let lastQuery = "";
 
 function showSpinner() {
     if (spinner) spinner.classList.add("active");
+    if (resultsContainer) resultsContainer.innerHTML = "";
 }
 
 function hideSpinner() {
@@ -29,8 +30,7 @@ async function performSearch(query) {
             <span class="company-name">${stock.companyName ?? ''}</span>
             <div class="meta">
                 <span class="badge badge-type">${stock.type ?? ''}</span>
-    <span class="badge">${stock.region ?? ''}</span>
-            </div>
+<span class="badge">${getRegionFlag(stock.region)} ${stock.region ?? ''}</span>            </div>
         </div>
     `).join('');
             resultsContainer.innerHTML = htmlList;
