@@ -1,4 +1,5 @@
 package com.malikh.stockwatchdog.controllers;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,6 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/api")
 public class StockController {
@@ -40,32 +40,31 @@ public class StockController {
     // Return specific stock
     @GetMapping("/stocks/{id}")
     public Optional<StockDTO> findByStock(@PathVariable Long id) {
-        return stockService.findById(id);
+        return stockService.getStockDetail(id);
     }
 
     // Create Stock
     @PostMapping("/stocks")
-        public Stock createStock(@RequestBody Stock s){
-            stockService.createStock(s);
-            return s;   
-        }
+    public Stock createStock(@RequestBody Stock s) {
+        stockService.createStock(s);
+        return s;
+    }
 
-    //Delete Stock
+    // Delete Stock
     @DeleteMapping("/stocks/{id}")
-        public void deleteStockById(@PathVariable Long id){
-            stockService.deleteStock(id);}
+    public void deleteStockById(@PathVariable Long id) {
+        stockService.deleteStock(id);
+    }
 
-
-    //Update Stock
+    // Update Stock
     @PutMapping("/stocks/{id}")
-        public void updateStock(@PathVariable Long id, @RequestBody Stock s){
-            stockService.updateStock(id, s);
-        }
-
+    public void updateStock(@PathVariable Long id, @RequestBody Stock s) {
+        stockService.updateStock(id, s);
+    }
 
     @GetMapping("/stocks/search")
     public List<StockDTO> searchForStock(@Valid @ModelAttribute StockSearchRequest query) {
         return stockService.upsertStock(query.getQuery());
     }
-    
+
 }
