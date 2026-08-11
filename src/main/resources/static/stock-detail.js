@@ -42,7 +42,7 @@ async function loadStockDetail() {
 
         symbolHeading.textContent = stock.symbol;
         typeBadge.textContent = stock.type ?? '';
-regionEl.textContent = `${getRegionFlag(stock.region)} ${stock.region ?? ''}`.trim();        companyNameEl.textContent = stock.companyName ?? '';
+        regionEl.textContent = `${getRegionFlag(stock.region)} ${stock.region ?? ''}`.trim(); companyNameEl.textContent = stock.companyName ?? '';
         symbolFactEl.textContent = stock.symbol;
 
         if (stock.price != null) {
@@ -59,6 +59,8 @@ regionEl.textContent = `${getRegionFlag(stock.region)} ${stock.region ?? ''}`.tr
         } else {
             priceEl.textContent = "Price unavailable";
         }
+
+        checkStockAlerts();
     } catch (error) {
         errorEl.textContent = `Error: ${error.message}`;
         errorEl.style.display = "block";
@@ -72,6 +74,72 @@ if (backButton) {
             window.history.back();
         } else {
             window.location.href = "index.html";
+        }
+    });
+}
+async function checkStockAlerts() {
+    if (!stockId) return;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/alerts");
+        if (!response.ok) return;
+        const alerts = await response.json();
+        const relevant = Array.isArray(alerts)
+            ? alerts.filter(alert => String(alert.stock?.id) === String(stockId))
+            : [];
+        await checkAlertsAndNotify(relevant);
+    } catch {
+        // best-effort, a failed notification check shouldn't break the page
+    }
+}
+
+
+function showAlertFeedback(message, type) {
+    const alertFeedback = document.getElementById("alert-feedback");
+    if (!alertFeedback) return;
+    alertFeedback.textContent = message;
+    alertFeedback.hidden = false;
+    alertFeedback.className = `alert-feedback ${type}`;
+}
+
+const alertForm = document.getElementById("alert-form");
+if (alertForm) {
+    alertForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!stockId) return;
+
+        const condition = document.getElementById("alert-condition").value;
+        const value = document.getElementById("alert-value").value;
+
+        if (!value || Number(value) <= 0) {
+            showAlertFeedback("Enter a valid price.", "error");
+            return;
+        }
+
+        const csrfToken = await getCsrfToken();
+
+        try {
+            const response = await fetch("http://localhost:8080/api/alerts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(csrfToken ? { "X-CSRF-TOKEN": csrfToken } : {})
+                },
+                body: JSON.stringify({
+                    stockId: Number(stockId),
+                    condition,
+                    value: Number(value)
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Request failed: ${response.status}`);
+            }
+
+            showAlertFeedback("Alert set.", "success");
+            alertForm.reset();
+        } catch (error) {
+            showAlertFeedback(`Error: ${error.message}`, "error");
         }
     });
 }

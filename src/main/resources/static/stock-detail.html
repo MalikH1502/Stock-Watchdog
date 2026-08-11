@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <script src="region-flags.js" defer></script>
+    <script src="notifications.js" defer></script>
     <script src="form.js" defer></script>
     <script src="stock-detail.js" defer></script>
 </head>
@@ -53,24 +54,40 @@
         </div>
 
         <div class="detail-grid">
-            <div class="panel">
-                <p class="panel-title">Price History</p>
-                <p class="panel-placeholder-text">Charting isn't wired up yet. Planned for a later pass.</p>
-            </div>
-            <div class="panel">
-                <p class="panel-title">Details</p>
-                <div class="detail-facts">
-                    <div>
-                        <div class="detail-fact-label">Company</div>
-                        <div class="detail-fact-value" id="detail-company-name"></div>
-                    </div>
-                    <div>
-                        <div class="detail-fact-label">Symbol</div>
-                        <div class="detail-fact-value" id="detail-symbol-fact"></div>
-                    </div>
+    <div class="panel">
+        <p class="panel-title">Price History</p>
+        <p class="panel-placeholder-text">Charting isn't wired up yet. Planned for a later pass.</p>
+    </div>
+    <div class="detail-side">
+        <div class="panel">
+            <p class="panel-title">Details</p>
+            <div class="detail-facts">
+                <div>
+                    <div class="detail-fact-label">Company</div>
+                    <div class="detail-fact-value" id="detail-company-name"></div>
+                </div>
+                <div>
+                    <div class="detail-fact-label">Symbol</div>
+                    <div class="detail-fact-value" id="detail-symbol-fact"></div>
                 </div>
             </div>
         </div>
+        <div class="panel">
+            <p class="panel-title">Set Alert</p>
+            <form id="alert-form" class="alert-form">
+                <label for="alert-condition" class="sr-only">Condition</label>
+                <select id="alert-condition" name="condition">
+                    <option value="ABOVE">Above</option>
+                    <option value="BELOW">Below</option>
+                </select>
+                <label for="alert-value" class="sr-only">Price</label>
+                <input type="number" id="alert-value" name="value" step="0.01" min="0" placeholder="Price" required>
+                <button type="submit">Set Alert</button>
+            </form>
+            <p id="alert-feedback" class="alert-feedback" hidden></p>
+        </div>
+    </div>
+</div>
         <span class="badge badge-type" id="detail-type-badge"></span>
 
         <p id="detail-error" style="color:red; display:none;"></p>
