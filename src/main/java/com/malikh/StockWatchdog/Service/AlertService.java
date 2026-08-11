@@ -3,33 +3,54 @@ package com.malikh.stockwatchdog.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.malikh.stockwatchdog.dto.AlertCreateRequest;
 import com.malikh.stockwatchdog.dto.AlertDTO;
 import com.malikh.stockwatchdog.entity.Alert;
+import com.malikh.stockwatchdog.entity.Stock;
+import com.malikh.stockwatchdog.entity.User;
 import com.malikh.stockwatchdog.mapper.AlertMapper;
 import com.malikh.stockwatchdog.repository.AlertRepository;
+import com.malikh.stockwatchdog.repository.StockRepository;
+import com.malikh.stockwatchdog.repository.UserRepository;
 
 @Service
 public class AlertService {
     private final AlertMapper alertMapper;
     private final AlertRepository alertRepo;
+    private final StockRepository stockRepo;
+    private final UserRepository userRepo;
 
-    public AlertService(AlertRepository alertRepo, AlertMapper alertMapper) {
+    public AlertService(AlertRepository alertRepo, AlertMapper alertMapper,
+                         StockRepository stockRepo, UserRepository userRepo) {
         this.alertRepo = alertRepo;
         this.alertMapper = alertMapper;
+        this.stockRepo = stockRepo;
+        this.userRepo = userRepo;
     }
 
-    // Create
-    public AlertDTO createAlert(Alert a) {
-        Alert savedAlert = alertRepo.save(a);
+    // Create, scoped to the requesting user
+    public AlertDTO createAlert(AlertCreateRequest request, String username) {
+        Stock stock = stockRepo.findById(request.getStockId())
+                .orElseThrow(() -> new RuntimeException("Stock not found with id: " + request.getStockId()));
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+
+        Alert alert = new Alert();
+        alert.setCondition(request.getCondition());
+        alert.setValue(request.getValue());
+        alert.setStock(stock);
+        alert.setUser(user);
+        alert.setIsTrue(false); // no evaluation logic exists yet, so this just means "not yet checked"
+
+        Alert savedAlert = alertRepo.save(alert);
         return alertMapper.toDTO(savedAlert);
     }
 
-    // Read
-    public List<AlertDTO> getAllAlerts() {
-        return alertRepo.findAll().stream()
+    // Read, scoped to the requesting user
+    public List<AlertDTO> getAlertsForUser(String username) {
+        return alertRepo.findByUserUsername(username).stream()
                 .map(alertMapper::toDTO)
                 .collect(Collectors.toList());
     }
@@ -45,6 +66,18 @@ public class AlertService {
         return alertMapper.toDTO(savedAlert);
     }
 
+    public AlertDTO markFired(Long id, String username) {
+    Alert alert = alertRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+
+    if (!alert.getUser().getUsername().equals(username)) {
+        throw new RuntimeException("Alert does not belong to this user");
+    }
+
+    alert.setIsTrue(true);
+    Alert saved = alertRepo.save(alert);
+    return alertMapper.toDTO(saved);
+}
     // Delete
     public void deleteAlert(Long id) {
         if (!alertRepo.existsById(id)) {
