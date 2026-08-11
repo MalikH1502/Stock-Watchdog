@@ -6,6 +6,7 @@
     <title>Settings</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="notifications.js" defer></script>
     <script src="form.js" defer></script>
 </head>
 <body>
@@ -17,7 +18,6 @@
                 <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-template-icon lucide-layout-template"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg>
                     <button type="button" data-page="./index.html">Dashboard</button>
                 </li>
-       
                 <li>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
                     <button type="button" data-page="./alerts.html">Alerts</button>
@@ -27,6 +27,16 @@
                     <button type="button" data-page="./settings.html">Settings</button>
                 </li>
             </ul>
+        </div>
+    </div>
+    <div class="topbar">
+        <h1>Settings</h1>
+    </div>
+    <div class="main-content">
+        <div class="panel notification-settings-panel">
+            <p class="panel-title">Notifications</p>
+            <p class="panel-placeholder-text" id="notification-status">Checking notification permission...</p>
+            <button type="button" id="enable-notifications-btn" class="btn-primary">Enable Desktop Notifications</button>
         </div>
     </div>
 </body>
