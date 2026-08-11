@@ -10,5 +10,6 @@ import com.malikh.stockwatchdog.entity.Stock;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
     public Optional<Stock> findStockBySymbol(String symbol);
-    
+    long countByFirstViewedAtIsNotNull();
+
 }

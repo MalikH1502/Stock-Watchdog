@@ -37,6 +37,12 @@ public class StockController {
         return stockService.getAllStocks();
     }
 
+    // Return count of stocks the user has actually viewed
+    @GetMapping("/stocks/tracked-count")
+    public long getTrackedCount() {
+        return stockService.getTotalTrackedCount();
+    }
+
     // Return specific stock
     @GetMapping("/stocks/{id}")
     public Optional<StockDTO> findByStock(@PathVariable Long id) {

@@ -21,5 +21,6 @@ public class Stock {
     private Instant lastUpdated;
     private String region;
     private String type;
+    private Instant firstViewedAt;
 
 }

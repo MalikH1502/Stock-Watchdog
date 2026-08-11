@@ -31,6 +31,10 @@ public class StockService {
         this.alphaVantageService = alphaVantageService;
     }
 
+    public long getTotalTrackedCount() {
+        return stockRepo.countByFirstViewedAtIsNotNull();
+    }
+
     public Optional<StockDTO> getStockDetail(Long id) {
         Optional<Stock> optionalStock = stockRepo.findById(id);
         if (optionalStock.isEmpty()) {
@@ -46,11 +50,16 @@ public class StockService {
             if (freshPrice != null) {
                 stock.setPrice(freshPrice);
                 stock.setLastUpdated(Instant.now());
-                stockRepo.save(stock);
             }
             // if freshPrice is null (rate limited, bad symbol, etc), we just keep serving
             // the old cached values
         }
+
+        if (stock.getFirstViewedAt() == null) {
+            stock.setFirstViewedAt(Instant.now());
+        }
+
+        stockRepo.save(stock);
 
         return Optional.of(stockMapper.toDTO(stock));
     }
