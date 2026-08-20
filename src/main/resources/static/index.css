@@ -262,6 +262,15 @@ html, body{
     margin-top: 4px;
 }
 
+.price-up{ color: var(--positive); }
+.price-down{ color: var(--negative); }
+.stock-card-price svg{
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    margin-left: 2px;
+}
+
 .stock-card .badge{
     font-family: var(--font-mono);
     font-size: 0.68rem;

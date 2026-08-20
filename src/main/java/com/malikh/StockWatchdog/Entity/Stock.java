@@ -22,5 +22,5 @@ public class Stock {
     private String region;
     private String type;
     private Instant firstViewedAt;
-
+    private Double previousPrice;
 }

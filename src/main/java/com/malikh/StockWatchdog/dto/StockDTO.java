@@ -15,5 +15,6 @@ public class StockDTO{
     private String region;
     private String type;
     private Instant lastUpdated;
+    private Double previousPrice;
 
 }

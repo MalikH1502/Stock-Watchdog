@@ -9,6 +9,10 @@ const symbolFactEl = document.getElementById("detail-symbol-fact");
 const priceEl = document.getElementById("detail-price");
 const errorEl = document.getElementById("detail-error");
 
+const ARROW_UP_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>alt-arrow-up-bold</title><path fill="#26ab28" d="m12.37 8.165l6.43 6.63c.401.414.158 1.205-.37 1.205H5.57c-.528 0-.771-.79-.37-1.205l6.43-6.63a.5.5 0 0 1 .74 0"/></svg>`;
+const ARROW_DOWN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>alt-arrow-down-bold</title><path fill="#8b0909" d="m12.37 15.835l6.43-6.63C19.201 8.79 18.958 8 18.43 8H5.57c-.528 0-.771.79-.37 1.205l6.43 6.63c.213.22.527.22.74 0"/></svg>`;
+
+
 function formatRelativeTime(isoString) {
     if (!isoString) return null;
     const diffMin = Math.floor((Date.now() - new Date(isoString).getTime()) / 60000);
@@ -18,6 +22,14 @@ function formatRelativeTime(isoString) {
     if (diffMin < 60) return `${diffMin} minutes ago`;
     const diffHr = Math.floor(diffMin / 60);
     return diffHr === 1 ? "1 hour ago" : `${diffHr} hours ago`;
+}
+function getPriceChangeIndicator(stock) {
+    if (stock.previousPrice == null || stock.price == null || stock.price === stock.previousPrice) {
+        return { priceClass: '', arrowHtml: '' };
+    }
+    return stock.price > stock.previousPrice
+        ? { priceClass: 'price-up', arrowHtml: ARROW_UP_SVG }
+        : { priceClass: 'price-down', arrowHtml: ARROW_DOWN_SVG };
 }
 
 async function loadStockDetail() {
@@ -46,8 +58,11 @@ async function loadStockDetail() {
         symbolFactEl.textContent = stock.symbol;
 
         if (stock.price != null) {
+            const { priceClass, arrowHtml } = getPriceChangeIndicator(stock);
             priceEl.textContent = `$${stock.price.toFixed(2)}`;
             priceEl.classList.remove("placeholder");
+            priceEl.classList.add(priceClass);
+            priceEl.insertAdjacentHTML("beforeend", arrowHtml);
 
             const relTime = formatRelativeTime(stock.lastUpdated);
             if (relTime) {

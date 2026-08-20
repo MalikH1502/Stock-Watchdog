@@ -48,6 +48,7 @@ public class StockService {
         if (isStale) {
             Double freshPrice = alphaVantageService.getQuotePrice(stock.getSymbol());
             if (freshPrice != null) {
+                stock.setPreviousPrice(stock.getPrice());
                 stock.setPrice(freshPrice);
                 stock.setLastUpdated(Instant.now());
             }
