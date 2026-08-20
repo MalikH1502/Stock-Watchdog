@@ -12,12 +12,14 @@ import com.malikh.stockwatchdog.dto.LoginRequest;
 import com.malikh.stockwatchdog.dto.UserDTO;
 import com.malikh.stockwatchdog.dto.UserRegistrationRequest;
 import com.malikh.stockwatchdog.entity.User;
+import com.malikh.stockwatchdog.exception.DuplicateResourceException;
+import com.malikh.stockwatchdog.exception.ResourceNotFoundException;
 import com.malikh.stockwatchdog.mapper.UserMapper;
 import com.malikh.stockwatchdog.repository.UserRepository;
 
 @Service
 public class UserService {
-    
+
     private final UserRepository userRepo;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -28,7 +30,11 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDTO createUser(UserRegistrationRequest request){
+    public UserDTO createUser(UserRegistrationRequest request) {
+        if (userRepo.findByUsername(request.getUsername()).isPresent()) {
+            throw new DuplicateResourceException("Username already taken");
+        }
+
         User u = new User();
         u.setUsername(request.getUsername());
         u.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -37,15 +43,15 @@ public class UserService {
         return userMapper.toDTO(userRepo.save(u));
     }
 
-    public List<UserDTO> getAllUsers(){
+    public List<UserDTO> getAllUsers() {
         return userRepo.findAll().stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public UserDTO updateUser(Long id, User updatedUser){
+    public UserDTO updateUser(Long id, User updatedUser) {
         User existingUser = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
@@ -54,11 +60,11 @@ public class UserService {
         return userMapper.toDTO(userRepo.save(existingUser));
     }
 
-    public void deleteUser(Long id){
+    public void deleteUser(Long id) {
         if (!userRepo.existsById(id)) {
-            throw new RuntimeException("User not found with id: " + id);
+            throw new ResourceNotFoundException("User not found with id: " + id);
         }
-        
+
         userRepo.deleteById(id);
     }
 }

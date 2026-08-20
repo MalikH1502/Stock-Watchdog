@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.malikh.stockwatchdog.dto.AlertCreateRequest;
 import com.malikh.stockwatchdog.dto.AlertDTO;
@@ -20,8 +21,14 @@ import jakarta.validation.Valid;
 @RequestMapping("/api")
 public class AlertController {
     private AlertService alertService;
+
     public AlertController(AlertService alertService) {
         this.alertService = alertService;
+    }
+
+    @DeleteMapping("/alerts/{id}")
+    public void deleteAlert(@PathVariable Long id, Authentication authentication) {
+        alertService.deleteAlert(id, authentication.getName());
     }
 
     @PostMapping("/alerts")

@@ -40,7 +40,7 @@ async function loadStockDetail() {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/api/stocks/${stockId}`);
+        const response = await fetch(`/api/stocks/${stockId}`);
         if (!response.ok) {
             throw new Error(`Request failed: ${response.status}`);
         }
@@ -96,7 +96,7 @@ async function checkStockAlerts() {
     if (!stockId) return;
 
     try {
-        const response = await fetch("http://localhost:8080/api/alerts");
+        const response = await fetch("/api/alerts");
         if (!response.ok) return;
         const alerts = await response.json();
         const relevant = Array.isArray(alerts)
@@ -134,7 +134,7 @@ if (alertForm) {
         const csrfToken = await getCsrfToken();
 
         try {
-            const response = await fetch("http://localhost:8080/api/alerts", {
+            const response = await fetch("/api/alerts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 async function getCsrfToken() {
     try {
-        const response = await fetch("http://localhost:8080/api/csrf");
+        const response = await fetch("/api/csrf");
         const data = await response.json();
         return data.token;
     } catch {
@@ -12,7 +12,7 @@ async function markAlertFired(alertId) {
     const csrfToken = await getCsrfToken();
 
     try {
-        const response = await fetch(`http://localhost:8080/api/alerts/${alertId}/mark-fired`, {
+        const response = await fetch(`/api/alerts/${alertId}/mark-fired`, {
             method: "POST",
             headers: {
                 ...(csrfToken ? { "X-CSRF-TOKEN": csrfToken } : {})

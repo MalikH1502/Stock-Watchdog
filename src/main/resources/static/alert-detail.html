@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alert Detail</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="notifications.js" defer></script>
+    <script src="form.js" defer></script>
+    <script src="alert-detail.js" defer></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Stock Watch</h2>
+        <h4>User Terminal</h4>
+        <div class="tab-container">
+            <ul>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg>
+                    <button type="button" data-page="./index.html">Dashboard</button>
+                </li>
+                <li class="active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+                    <button type="button" data-page="./alerts.html">Alerts</button>
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+                    <button type="button" data-page="./settings.html">Settings</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="topbar">
+        <button type="button" id="back-button" class="back-button" aria-label="Back to alerts">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        </button>
+        <h1>Alert Detail</h1>
+    </div>
+
+    <main class="main-content alert-detail-page">
+        <section class="detail-header alert-detail-header">
+            <div>
+                <div class="alert-detail-heading">
+                    <span id="alert-status" class="status-badge status-active">Active</span>
+                    <h1 id="alert-title">Loading alert...</h1>
+                </div>
+                <p id="alert-description" class="alert-detail-description"></p>
+                <p id="alert-id" class="alert-detail-id"></p>
+            </div>
+            <div class="alert-detail-actions">
+                <button type="button" id="delete-alert-btn" class="btn-danger">Delete</button>
+            </div>
+        </section>
+
+        <div id="alert-content" class="detail-grid" hidden>
+            <div class="alert-detail-main">
+                <section class="panel">
+                    <p class="panel-title">Alert Status</p>
+                    <div class="alert-detail-status">
+                        <div class="alert-detail-stat">
+                            <div class="alert-detail-stat-label">Current Price</div>
+                            <div id="current-price" class="alert-detail-stat-value">Pending</div>
+                        </div>
+                        <div class="alert-detail-stat">
+                            <div class="alert-detail-stat-label">Target Price</div>
+                            <div id="target-price" class="alert-detail-stat-value"></div>
+                        </div>
+                        <div class="alert-detail-stat">
+                            <div class="alert-detail-stat-label">Distance</div>
+                            <div id="price-distance" class="alert-detail-stat-value"></div>
+                        </div>
+                    </div>
+                    <div class="alert-progress-track alert-detail-progress">
+                        <div id="alert-progress" class="alert-detail-progress-fill"></div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <p class="panel-title">Trigger History</p>
+                    <div class="alert-detail-chart">Historical trigger data will appear here when the API provides it.</div>
+                </section>
+
+                <section class="panel">
+                    <p class="panel-title">Recent Activity</p>
+                    <table class="alert-detail-activity">
+                        <thead>
+                            <tr><th>Event</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Alert created</td><td id="activity-status">Active and monitoring</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <aside class="detail-side">
+                <section class="panel">
+                    <p class="panel-title">Alert Parameters</p>
+                    <div class="detail-facts">
+                        <div>
+                            <div class="detail-fact-label">Target Symbol</div>
+                            <div class="detail-fact-value"><a id="stock-link" class="alert-detail-stock-link" href="#">View stock</a></div>
+                        </div>
+                        <div>
+                            <div class="detail-fact-label">Company</div>
+                            <div id="company-name" class="detail-fact-value"></div>
+                        </div>
+                        <div>
+                            <div class="detail-fact-label">Condition</div>
+                            <div id="alert-condition" class="detail-fact-value"></div>
+                        </div>
+                        <div>
+                            <div class="detail-fact-label">Price Source</div>
+                            <div class="detail-fact-value">Live quote</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <p class="panel-title">Stock Context</p>
+                    <div class="detail-facts">
+                        <div>
+                            <div class="detail-fact-label">Region</div>
+                            <div id="stock-region" class="detail-fact-value"></div>
+                        </div>
+                        <div>
+                            <div class="detail-fact-label">Type</div>
+                            <div id="stock-type" class="detail-fact-value"></div>
+                        </div>
+                        <div>
+                            <div class="detail-fact-label">Last Updated</div>
+                            <div id="stock-updated" class="detail-fact-value"></div>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <p id="alert-message" class="alert-detail-empty" hidden></p>
+    </main>
+</body>
+</html>

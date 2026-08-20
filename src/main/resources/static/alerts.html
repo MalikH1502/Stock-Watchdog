@@ -6,18 +6,19 @@
     <title>Alerts</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="notifications.js" defer></script>
     <script src="form.js" defer></script>
+    <script src="alerts.js" defer></script>
 </head>
 <body>
     <div class="sidebar">
-        <h2>Stock Watchdog</h2>
+        <h2>Stock Watch</h2>
         <h4> User Terminal</h4>
         <div class="tab-container">
             <ul>
                 <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-template-icon lucide-layout-template"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg>
                     <button type="button" data-page="./index.html">Dashboard</button>
                 </li>
-               
                 <li class="active">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
                     <button type="button" data-page="./alerts.html">Alerts</button>
@@ -27,6 +28,56 @@
                     <button type="button" data-page="./settings.html">Settings</button>
                 </li>
             </ul>
+        </div>
+    </div>
+
+    <div class="topbar">
+        <h1>Alerts</h1>
+        <button type="button" id="open-add-alert-btn" class="btn-primary" style="margin-left:auto;">+ Add New Alert</button>
+    </div>
+
+    <div class="main-content">
+        <div class="tabs">
+            <button type="button" class="tab active" data-tab="active">Active (<span id="tab-count-active">0</span>)</button>
+            <button type="button" class="tab" data-tab="triggered">Triggered (<span id="tab-count-triggered">0</span>)</button>
+            <button type="button" class="tab" data-tab="all">All (<span id="tab-count-all">0</span>)</button>
+        </div>
+
+        <div id="alerts-grid" class="alerts-grid"></div>
+        <p id="alerts-empty" class="no-results" hidden>No alerts here yet.</p>
+
+        
+    </div>
+
+    <div id="add-alert-modal" class="modal-overlay" hidden>
+        <div class="modal">
+            <h2>Add Alert</h2>
+
+            <div id="stock-search-step">
+                <label for="alert-stock-search" class="sr-only">Search stocks</label>
+                <input type="text" id="alert-stock-search" placeholder="Search symbol or company..." style="width:100%; box-sizing:border-box; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px 10px; color:var(--text); font-family:'Inter',sans-serif;">
+                <div id="stock-search-results" class="stock-search-results"></div>
+            </div>
+
+            <div id="selected-stock-chip" class="selected-stock-chip" hidden>
+                <span id="selected-stock-label"></span>
+                <button type="button" id="change-stock-btn" style="background:none;border:none;color:var(--text-dim);cursor:pointer;">Change</button>
+            </div>
+
+            <form id="new-alert-form" class="alert-form" hidden style="margin-top:var(--space-md);">
+                <label for="new-alert-condition" class="sr-only">Condition</label>
+                <select id="new-alert-condition" name="condition">
+                    <option value="ABOVE">Above</option>
+                    <option value="BELOW">Below</option>
+                </select>
+                <label for="new-alert-value" class="sr-only">Price</label>
+                <input type="number" id="new-alert-value" name="value" step="0.01" min="0" placeholder="Target price" required>
+                <button type="submit">Set Alert</button>
+            </form>
+
+            <p id="new-alert-feedback" class="alert-feedback" hidden></p>
+
+            <button type="button" id="close-add-alert-btn" class="btn-primary" style="margin-top:var(--space-md); background:var(--surface-highest); color:var(--text);">Cancel</button>
         </div>
     </div>
 </body>

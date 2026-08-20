@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <script src="notifications.js" defer></script>
     <script src="form.js" defer></script>
+    <script src="logout.js" defer></script>
 </head>
 <body>
     <div class="sidebar">
-        <h2>Stock Watchdog</h2>
+        <h2>Stock Watch</h2>
         <h4> User Terminal</h4>
         <div class="tab-container">
             <ul>
@@ -37,6 +38,11 @@
             <p class="panel-title">Notifications</p>
             <p class="panel-placeholder-text" id="notification-status">Checking notification permission...</p>
             <button type="button" id="enable-notifications-btn" class="btn-primary">Enable Desktop Notifications</button>
+        </div>
+        <div class="panel account-settings-panel">
+            <p class="panel-title">Account</p>
+            <button type="button" id="logout-btn" class="btn-danger">Log Out</button>
+            <p id="logout-feedback" class="alert-feedback" hidden></p>
         </div>
     </div>
 </body>

@@ -66,16 +66,16 @@
     }
 
     function buildPriceBlockHtml(stock) {
-    if (stock.price == null) return '';
-    const updatedText = formatShortRelativeTime(stock.lastUpdated) ?? '';
-    const stalenessClass = getStalenessClass(stock.lastUpdated);
-    const { priceClass, arrowHtml } = getPriceChangeIndicator(stock);
-    return `
+        if (stock.price == null) return '';
+        const updatedText = formatShortRelativeTime(stock.lastUpdated) ?? '';
+        const stalenessClass = getStalenessClass(stock.lastUpdated);
+        const { priceClass, arrowHtml } = getPriceChangeIndicator(stock);
+        return `
             <div class="stock-card-price-block">
                 <span class="stock-card-price ${priceClass}">$${stock.price.toFixed(2)}${arrowHtml}</span>
                 <span class="stock-card-updated ${stalenessClass}">${updatedText}</span>
             </div>`;
-}
+    }
 
     function buildStockCardsHtml(data) {
         return data.map(stock => `
@@ -98,7 +98,7 @@
         if (!totalStat) return;
 
         try {
-            const response = await fetch("http://localhost:8080/api/stocks/tracked-count");
+            const response = await fetch("/api/stocks/tracked-count");
             if (!response.ok) throw new Error(`Request failed: ${response.status}`);
             const count = await response.json();
             totalStat.textContent = count;
@@ -112,7 +112,7 @@
         const alertsStat = document.getElementById("stat-alerts-set");
 
         try {
-            const response = await fetch("http://localhost:8080/api/alerts");
+            const response = await fetch("/api/alerts");
             if (!response.ok) throw new Error(`Request failed: ${response.status}`);
             const alerts = await response.json();
             const list = Array.isArray(alerts) ? alerts : [];
@@ -123,42 +123,11 @@
                 alertsList.innerHTML = list.length === 0
                     ? `<p class="alerts-empty">No alerts set yet.</p>`
                     : list.map(alert => `
-                    <div class="alert-row">
-                        <span class="alert-symbol">${alert.stock?.symbol ?? ''}</span>
-                        <span class="alert-condition">${alert.condition ?? ''} $${alert.value ?? ''}</span>
-                    </div>
-                `).join('');
-            }
-
-            renderAlertStocks(list);
-        } catch (error) {
-            const message = `<p style="color:red">Error loading alerts: ${error.message}</p>`;
-            if (alertsList) alertsList.innerHTML = message;
-            if (els.resultsContainer) els.resultsContainer.innerHTML = message;
-        }
-    }
-
-    async function loadAlerts() {
-        const alertsList = document.getElementById("alerts-list");
-        const alertsStat = document.getElementById("stat-alerts-set");
-
-        try {
-            const response = await fetch("http://localhost:8080/api/alerts");
-            if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-            const alerts = await response.json();
-            const list = Array.isArray(alerts) ? alerts : [];
-
-            if (alertsStat) alertsStat.textContent = list.length;
-
-            if (alertsList) {
-                alertsList.innerHTML = list.length === 0
-                    ? `<p class="alerts-empty">No alerts set yet.</p>`
-                    : list.map(alert => `
-                    <div class="alert-row">
-                        <span class="alert-symbol">${alert.stock?.symbol ?? ''}</span>
-                        <span class="alert-condition">${alert.condition ?? ''} $${alert.value ?? ''}</span>
-                    </div>
-                `).join('');
+                <div class="alert-row">
+                    <span class="alert-symbol">${alert.stock?.symbol ?? ''}</span>
+                    <span class="alert-condition">${alert.condition ?? ''} $${alert.value ?? ''}</span>
+                </div>
+            `).join('');
             }
 
             renderAlertStocks(list);
@@ -166,7 +135,7 @@
         } catch (error) {
             const message = `<p style="color:red">Error loading alerts: ${error.message}</p>`;
             if (alertsList) alertsList.innerHTML = message;
-            if (resultsContainer) resultsContainer.innerHTML = message;
+            if (els.resultsContainer) els.resultsContainer.innerHTML = message;
         }
     }
 

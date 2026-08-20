@@ -10,6 +10,8 @@ import com.malikh.stockwatchdog.dto.AlertDTO;
 import com.malikh.stockwatchdog.entity.Alert;
 import com.malikh.stockwatchdog.entity.Stock;
 import com.malikh.stockwatchdog.entity.User;
+import com.malikh.stockwatchdog.exception.ForbiddenOperationException;
+import com.malikh.stockwatchdog.exception.ResourceNotFoundException;
 import com.malikh.stockwatchdog.mapper.AlertMapper;
 import com.malikh.stockwatchdog.repository.AlertRepository;
 import com.malikh.stockwatchdog.repository.StockRepository;
@@ -23,7 +25,7 @@ public class AlertService {
     private final UserRepository userRepo;
 
     public AlertService(AlertRepository alertRepo, AlertMapper alertMapper,
-                         StockRepository stockRepo, UserRepository userRepo) {
+            StockRepository stockRepo, UserRepository userRepo) {
         this.alertRepo = alertRepo;
         this.alertMapper = alertMapper;
         this.stockRepo = stockRepo;
@@ -56,32 +58,40 @@ public class AlertService {
     }
 
     // Update
-    public AlertDTO updateAlert(Long id, Alert updatedAlert) {
-        Alert existingAlert = alertRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+    public AlertDTO updateAlert(Long id, Alert updatedAlert, String username) {
+    Alert existingAlert = alertRepo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Alert not found with id: " + id));
 
-        existingAlert.setStock(updatedAlert.getStock());
-        existingAlert.setValue(updatedAlert.getValue());
-        Alert savedAlert = alertRepo.save(existingAlert);
-        return alertMapper.toDTO(savedAlert);
+    if (!existingAlert.getUser().getUsername().equals(username)) {
+        throw new ForbiddenOperationException("Alert does not belong to this user");
     }
+
+    existingAlert.setStock(updatedAlert.getStock());
+    existingAlert.setValue(updatedAlert.getValue());
+    Alert savedAlert = alertRepo.save(existingAlert);
+    return alertMapper.toDTO(savedAlert);
+}
 
     public AlertDTO markFired(Long id, String username) {
-    Alert alert = alertRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Alert not found with id: " + id));
+        Alert alert = alertRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Alert not found with id: " + id));
 
-    if (!alert.getUser().getUsername().equals(username)) {
-        throw new RuntimeException("Alert does not belong to this user");
+        if (!alert.getUser().getUsername().equals(username)) {
+            throw new ResourceNotFoundException("Alert does not belong to this user");
+        }
+
+        alert.setIsTrue(true);
+        Alert saved = alertRepo.save(alert);
+        return alertMapper.toDTO(saved);
     }
 
-    alert.setIsTrue(true);
-    Alert saved = alertRepo.save(alert);
-    return alertMapper.toDTO(saved);
-}
     // Delete
-    public void deleteAlert(Long id) {
-        if (!alertRepo.existsById(id)) {
-            throw new RuntimeException("Alert not found with id: " + id);
+    public void deleteAlert(Long id, String username) {
+        Alert alert = alertRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Alert not found with id: " + id));
+
+        if (!alert.getUser().getUsername().equals(username)) {
+            throw new ResourceNotFoundException("Alert does not belong to this user");
         }
 
         alertRepo.deleteById(id);
