@@ -1,0 +1,21 @@
+spring.config.import=optional:file:.env[.properties]
+spring.application.name=StockWatchdog
+
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/stockwatchdog}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+
+server.servlet.session.cookie.http-only=true
+server.servlet.session.cookie.secure=false
+server.servlet.session.cookie.same-site=strict
+server.servlet.session.timeout=1800
+
+# Free tier: 25 calls/day, shared across all endpoints
+alphavantage.api.key=${ALPHA_VANTAGE_API_KEY}
