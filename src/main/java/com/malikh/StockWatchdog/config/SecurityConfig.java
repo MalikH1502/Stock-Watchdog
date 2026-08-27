@@ -27,44 +27,44 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> { })
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> {
+                })
 
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    LOGIN_PAGE, SIGNUP_PAGE,
-                    "/login.css", "/signup.css",
-                    "/*.js", API_LOGIN, API_SIGNUP, API_CSRF
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                LOGIN_PAGE, SIGNUP_PAGE,
+                                "/login.css", "/signup.css",
+                                "/*.js", API_LOGIN, API_SIGNUP, API_CSRF)
+                        .permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/stocks").hasRole("ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/stocks/**").hasRole("ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/stocks/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
 
-            .formLogin(form -> form
-                .loginPage(LOGIN_PAGE)
-                .loginProcessingUrl(API_LOGIN)
-                .defaultSuccessUrl("/index.html", true)
-                .failureUrl(LOGIN_PAGE + "?error=true")
-                .permitAll()
-            )
-           
-            .logout(logout -> logout
-                .logoutUrl("/api/logout")
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl(LOGIN_PAGE)
-                .permitAll()
-            )
+                .formLogin(form -> form
+                        .loginPage(LOGIN_PAGE)
+                        .loginProcessingUrl(API_LOGIN)
+                        .defaultSuccessUrl("/index.html", true)
+                        .failureUrl(LOGIN_PAGE + "?error=true")
+                        .permitAll())
 
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(
-                    org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED)
-                );
-                return http.build();
+                .logout(logout -> logout
+                        .logoutUrl("/api/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessUrl(LOGIN_PAGE)
+                        .permitAll())
+
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(
+                                org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED));
+        return http.build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:8080"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -76,6 +76,7 @@ public class SecurityConfig {
         return source;
 
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -85,5 +86,5 @@ public class SecurityConfig {
     public RestClient.Builder restClientBuilder() {
         return RestClient.builder();
     }
-    
+
 }
