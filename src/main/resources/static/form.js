@@ -158,7 +158,7 @@
 
     async function performSearch(query) {
         const searchParams = new URLSearchParams({ query });
-        const url = `http://localhost:8080/api/stocks/search?${searchParams}`;
+        const url = `/api/stocks/search?${searchParams}`;
 
         try {
             const data = await fetchJson(url, { throwOnNotOk: false });
