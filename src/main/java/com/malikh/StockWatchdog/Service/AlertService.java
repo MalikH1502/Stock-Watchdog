@@ -35,9 +35,9 @@ public class AlertService {
     // Create, scoped to the requesting user
     public AlertDTO createAlert(AlertCreateRequest request, String username) {
         Stock stock = stockRepo.findById(request.getStockId())
-                .orElseThrow(() -> new RuntimeException("Stock not found with id: " + request.getStockId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Stock not found with id: " + request.getStockId()));
         User user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
 
         Alert alert = new Alert();
         alert.setCondition(request.getCondition());

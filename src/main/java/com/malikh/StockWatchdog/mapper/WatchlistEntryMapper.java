@@ -7,8 +7,13 @@ import com.malikh.stockwatchdog.entity.WatchlistEntry;
 
 @Component
 public class WatchlistEntryMapper {
-    private final StockMapper stockMapper = new StockMapper();
-    private final UserMapper userMapper = new UserMapper();
+    private final StockMapper stockMapper;
+    private final UserMapper userMapper;
+
+    public WatchlistEntryMapper(StockMapper stockMapper, UserMapper userMapper) {
+        this.stockMapper = stockMapper;
+        this.userMapper = userMapper;
+    }
 
     public WatchlistEntryDTO toDTO(WatchlistEntry entry) {
         WatchlistEntryDTO dto = new WatchlistEntryDTO();

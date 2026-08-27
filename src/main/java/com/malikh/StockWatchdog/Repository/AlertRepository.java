@@ -9,5 +9,5 @@ import com.malikh.stockwatchdog.entity.Alert;
 @Repository
 public interface AlertRepository extends JpaRepository<Alert, Long>{
     List<Alert> findByUserUsername(String username);
-
+    boolean existsByStockId(Long stockId);
 }

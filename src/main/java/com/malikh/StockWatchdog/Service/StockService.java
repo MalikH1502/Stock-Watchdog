@@ -13,21 +13,30 @@ import org.springframework.stereotype.Service;
 import com.malikh.stockwatchdog.dto.AlphaVantageMatch;
 import com.malikh.stockwatchdog.dto.StockDTO;
 import com.malikh.stockwatchdog.entity.Stock;
+import com.malikh.stockwatchdog.exception.ResourceInUseException;
 import com.malikh.stockwatchdog.exception.ResourceNotFoundException;
 import com.malikh.stockwatchdog.mapper.StockMapper;
+import com.malikh.stockwatchdog.repository.AlertRepository;
 import com.malikh.stockwatchdog.repository.StockRepository;
+import com.malikh.stockwatchdog.repository.WatchlistRepository;
 
 @Service
 public class StockService {
     private final StockRepository stockRepo;
     private final StockMapper stockMapper;
     private final AlphaVantageService alphaVantageService;
+    private final AlertRepository alertRepo;
+    private final WatchlistRepository watchlistRepo;
     private static final Duration QUOTE_STALE_THRESHOLD = Duration.ofMinutes(5);
 
-    public StockService(StockRepository stockRepo, StockMapper stockMapper, AlphaVantageService alphaVantageService) {
+    public StockService(StockRepository stockRepo, StockMapper stockMapper,
+            AlphaVantageService alphaVantageService, AlertRepository alertRepo,
+            WatchlistRepository watchlistRepo) {
         this.stockRepo = stockRepo;
         this.stockMapper = stockMapper;
         this.alphaVantageService = alphaVantageService;
+        this.alertRepo = alertRepo;
+        this.watchlistRepo = watchlistRepo;
     }
 
     public long getTotalTrackedCount() {
@@ -116,6 +125,12 @@ public class StockService {
     public void deleteStock(Long s) {
         if (!stockRepo.existsById(s)) {
             throw new ResourceNotFoundException("Stock not found");
+        }
+        if (alertRepo.existsByStockId(s)) {
+            throw new ResourceInUseException("Cannot delete stock: one or more alerts reference it");
+        }
+        if (watchlistRepo.existsByStockId(s)) {
+            throw new ResourceInUseException("Cannot delete stock: it is present in a watchlist");
         }
         stockRepo.deleteById(s);
     }

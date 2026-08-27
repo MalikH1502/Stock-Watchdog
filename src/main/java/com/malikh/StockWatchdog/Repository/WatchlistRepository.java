@@ -7,5 +7,5 @@ import com.malikh.stockwatchdog.entity.WatchlistEntry;
 
 @Repository
 public interface WatchlistRepository extends JpaRepository<WatchlistEntry, Long> {
-    
+    boolean existsByStockId(Long stockId);
 }
