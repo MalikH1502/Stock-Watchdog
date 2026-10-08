@@ -78,6 +78,25 @@ The deployed service requires hosted PostgreSQL and Redis. Spring Session stores
 
 For HTTPS deployments, configure TLS at the host or reverse proxy and set `SESSION_COOKIE_SECURE=true`. SQL logging is disabled by default; set `SPRING_JPA_SHOW_SQL=true` only while diagnosing a local issue.
 
+## Deploying to Render with Docker
+
+Create a Render **Web Service** connected to this repository and select **Docker** as the runtime. Render will build the root `Dockerfile` and provide the `PORT` environment variable automatically.
+
+Provision a Render PostgreSQL database and a Render Key Value (Redis) instance, then add these environment variables to the web service:
+
+```text
+SPRING_DATASOURCE_URL=<Render PostgreSQL internal JDBC URL>
+SPRING_DATASOURCE_USERNAME=<Render PostgreSQL username>
+SPRING_DATASOURCE_PASSWORD=<Render PostgreSQL password>
+REDIS_HOST=<Render Key Value internal hostname>
+REDIS_PORT=<Render Key Value internal port>
+REDIS_PASSWORD=<Render Key Value password, if enabled>
+ALPHA_VANTAGE_API_KEY=<your Alpha Vantage key>
+SESSION_COOKIE_SECURE=true
+```
+
+Use Render's **internal** database and Redis connection values when all services are in the same Render account and region. Do not commit these values to the repository. Configure the web service health check as `/actuator/health` after confirming that endpoint is reachable in the deployed security configuration.
+
 ## Known limitations
 
 - Alpha Vantage's free tier allows 25 requests per day shared across searches and quotes. When the limit is reached, searches show a clear error and stock detail pages continue serving the last cached quote.

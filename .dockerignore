@@ -1,0 +1,12 @@
+.git
+.github
+.idea
+.vscode
+target
+build
+*.log
+.env
+application.properties
+README.md
+Dockerfile
+.dockerignore
