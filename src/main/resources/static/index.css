@@ -419,6 +419,23 @@ textarea {
     }
 }
 
+.help-card{
+    background: var(--surface-high);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin-bottom: 10px;
+}
+
+.help-title{
+    font-size: 2rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.help-body{
+
+}
 .panel {
     background: var(--surface-high);
     border: 1px solid var(--border);
@@ -435,6 +452,8 @@ textarea {
     color: var(--text-dim);
     margin: 0 0 var(--space-sm) 0;
 }
+
+
 
 .panel-placeholder-text {
     color: var(--text-dim);
@@ -1049,3 +1068,4 @@ textarea {
     color: var(--text);
     margin-top: var(--space-sm);
 }
+

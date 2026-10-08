@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.malikh.stockwatchdog.dto.WatchlistAddRequest;
-import com.malikh.stockwatchdog.entity.WatchlistEntry;
 import com.malikh.stockwatchdog.service.WatchlistService;
 
 import jakarta.validation.Valid;

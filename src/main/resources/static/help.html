@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="form.js" defer></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Stock Watch</h2>
+        <h4> User Terminal</h4>
+        <div class="tab-container">
+            <ul>
+                <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-template-icon lucide-layout-template"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg>
+                    <button type="button" data-page="./index.html">Dashboard</button>
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+                    <button type="button" data-page="./alerts.html">Alerts</button>
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+                    <button type="button" data-page="./settings.html">Settings</button>
+                </li>
+                <li class = "active">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <title xmlns="">circle-question-mark</title>
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01" />
+                        </g>
+                    </svg> 
+                    <button type="button" data-page="./help.html">Help</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="topbar">
+        <h1>Help</h1>
+    </div>
+    <div class="main-content">
+        <div class="help-card">
+            <h1 class="help-title">Help Centre</h1>
+            <p class="panel-placeholder-text" id="notification-status">Find quick answers, tutorials and friendly support to get the most out of StockWatch!</p>
+<form id="help-form" action="/api/help" method="get">
+            <label for="help-search"></label>
+            <div class="search-input-wrapper"
+                style="position:relative; display:inline-block; width:100%; max-width:420px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+                    style="position:absolute; left:10px; top:50%; transform:translateY(-50%); pointer-events:none; width:18px; height:18px; color:#9b9b9b;">
+                    <path d="M17 17L21 21" stroke="#9b9b9b" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" fill="none"></path>
+                    <path
+                        d="M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z"
+                        stroke="#9b9b9b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    </path>
+                </svg>
+                <input type="search" id="help-search" name="article" placeholder="Search articles.."
+                    style="padding-left:36px; width:100%; box-sizing:border-box;">
+            </div>
+            <span id="search-error" style="color:red; font-size:small;"></span>
+        </form>
+        </div>
+        <div class="panel account-settings-panel">
+            <p class="panel-title">Account</p>
+            <button type="button" id="logout-btn" class="btn-danger">Log Out</button>
+            <p id="logout-feedback" class="alert-feedback" hidden></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.malikh.stockwatchdog.dto.LoginRequest;
-import com.malikh.stockwatchdog.dto.UserDTO;
 import com.malikh.stockwatchdog.dto.UserRegistrationRequest;
-import com.malikh.stockwatchdog.entity.User;
 import com.malikh.stockwatchdog.service.UserService;
 
 import jakarta.validation.Valid;
