@@ -15,6 +15,7 @@ import com.malikh.stockwatchdog.dto.StockDTO;
 import com.malikh.stockwatchdog.entity.Stock;
 import com.malikh.stockwatchdog.exception.ResourceInUseException;
 import com.malikh.stockwatchdog.exception.ResourceNotFoundException;
+import com.malikh.stockwatchdog.exception.ExternalApiLimitException;
 import com.malikh.stockwatchdog.mapper.StockMapper;
 import com.malikh.stockwatchdog.repository.AlertRepository;
 import com.malikh.stockwatchdog.repository.StockRepository;
@@ -54,14 +55,16 @@ public class StockService {
                 || Instant.now().isAfter(stock.getLastUpdated().plus(QUOTE_STALE_THRESHOLD));
 
         if (isStale) {
-            Double freshPrice = alphaVantageService.getQuotePrice(stock.getSymbol());
-            if (freshPrice != null) {
-                stock.setPreviousPrice(stock.getPrice());
-                stock.setPrice(freshPrice);
-                stock.setLastUpdated(Instant.now());
+            try {
+                Double freshPrice = alphaVantageService.getQuotePrice(stock.getSymbol());
+                if (freshPrice != null) {
+                    stock.setPreviousPrice(stock.getPrice());
+                    stock.setPrice(freshPrice);
+                    stock.setLastUpdated(Instant.now());
+                }
+            } catch (ExternalApiLimitException ex) {
+                // Keep serving the last cached value when the provider quota is exhausted.
             }
-            // if freshPrice is null (rate limited, bad symbol, etc), we just keep serving
-            // the old cached values
         }
 
         if (stock.getFirstViewedAt() == null) {

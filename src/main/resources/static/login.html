@@ -24,6 +24,9 @@
         <div id="login-error" class="login-error" hidden>
             Invalid username or password.
         </div>
+        <div id="signup-success" class="login-success" hidden>
+            Account created. Sign in to continue.
+        </div>
         <form action="/api/login" method="post">
             <input type="hidden" name="_csrf" id="login-csrf-token">
             <div class="login-field">
@@ -48,6 +51,9 @@
 
         if (params.has('error')) {
             errorBanner.hidden = false;
+        }
+        if (params.get('registered') === 'true') {
+            document.getElementById('signup-success').hidden = false;
         }
 
         try {

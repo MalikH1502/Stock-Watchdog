@@ -61,7 +61,9 @@ async function loadStockDetail() {
             const { priceClass, arrowHtml } = getPriceChangeIndicator(stock);
             priceEl.textContent = `$${stock.price.toFixed(2)}`;
             priceEl.classList.remove("placeholder");
-            priceEl.classList.add(priceClass);
+            if (priceClass) {
+                priceEl.classList.add(priceClass);
+            }
             priceEl.insertAdjacentHTML("beforeend", arrowHtml);
 
             const relTime = formatRelativeTime(stock.lastUpdated);

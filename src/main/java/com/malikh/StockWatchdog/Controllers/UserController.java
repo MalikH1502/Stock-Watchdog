@@ -1,5 +1,7 @@
 package com.malikh.stockwatchdog.controllers;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import java.util.Map;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +30,9 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> register(@Valid UserRegistrationRequest request) {
         userService.createUser(request);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.status(HttpStatus.SEE_OTHER)
+                .header(HttpHeaders.LOCATION, "/login.html?registered=true")
+                .build();
     }
 
 }

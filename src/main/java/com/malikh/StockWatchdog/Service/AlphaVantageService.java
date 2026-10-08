@@ -15,6 +15,7 @@ import com.malikh.stockwatchdog.entity.Stock;
 import com.malikh.stockwatchdog.dto.AlphaVantageMatch;
 import com.malikh.stockwatchdog.dto.AlphaVantageQuoteResponse;
 import com.malikh.stockwatchdog.dto.AlphaVantageSearchResponse;
+import com.malikh.stockwatchdog.exception.ExternalApiLimitException;
 
 @Service
 public class AlphaVantageService {
@@ -40,6 +41,9 @@ public class AlphaVantageService {
                 .retrieve()
                 .body(AlphaVantageQuoteResponse.class);
 
+        if (response != null && (response.getNote() != null || response.getInformation() != null)) {
+            throw new ExternalApiLimitException("Alpha Vantage's daily data limit has been reached. Cached prices are still available.");
+        }
         if (response == null || response.getGlobalQuote() == null || response.getGlobalQuote().getPrice() == null) {
             return null;
         }
@@ -61,6 +65,10 @@ public class AlphaVantageService {
                         .build())
                 .retrieve()
                 .body(AlphaVantageSearchResponse.class);
+        if (alphaVantageSearchResponse != null
+                && (alphaVantageSearchResponse.getNote() != null || alphaVantageSearchResponse.getInformation() != null)) {
+            throw new ExternalApiLimitException("Alpha Vantage's daily data limit has been reached. Try again tomorrow.");
+        }
         if (alphaVantageSearchResponse == null || alphaVantageSearchResponse.getMatches() == null) {
 
             return new ArrayList<>();

@@ -13,6 +13,12 @@ public class AlphaVantageSearchResponse {
     @JsonProperty("bestMatches")
     private List<AlphaVantageMatch> bestMatches;
 
+    @JsonProperty("Note")
+    private String note;
+
+    @JsonProperty("Information")
+    private String information;
+
     public List<AlphaVantageMatch> getMatches(){
         return bestMatches;
     }

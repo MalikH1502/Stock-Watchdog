@@ -23,6 +23,12 @@
     let selectedStock = null;
     let searchDebounce = null;
 
+    function escapeHtml(value) {
+        const element = document.createElement('div');
+        element.textContent = String(value ?? '');
+        return element.innerHTML;
+    }
+
     function computeProgress(alert) {
         const price = alert.stock?.price;
         if (price == null || !alert.value) return null;
@@ -48,8 +54,8 @@
         <div class="alert-card" data-id="${alert.id}">
             <div class="alert-card-header">
                 <div>
-                    <span class="alert-card-symbol">${alert.stock?.symbol ?? ''}</span>
-                    <span class="alert-card-company">${alert.stock?.companyName ?? ''}</span>
+                    <span class="alert-card-symbol">${escapeHtml(alert.stock?.symbol)}</span>
+                    <span class="alert-card-company">${escapeHtml(alert.stock?.companyName)}</span>
                 </div>
                 <span class="status-badge ${statusClass}">${statusText}</span>
             </div>
@@ -175,13 +181,16 @@
     async function searchStocks(query) {
         try {
             const response = await fetch(`/api/stocks/search?${new URLSearchParams({ query })}`);
-            if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error || `Request failed: ${response.status}`);
+            }
             const results = await response.json();
             els.searchResults.innerHTML = results.length === 0
                 ? `<div class="stock-search-result-item">No matches.</div>`
                 : results.map(s => `
-                    <div class="stock-search-result-item" data-id="${s.id}" data-symbol="${s.symbol}" data-company="${s.companyName ?? ''}">
-                        <strong>${s.symbol}</strong> — ${s.companyName ?? ''}
+                    <div class="stock-search-result-item" data-id="${s.id}" data-symbol="${escapeHtml(s.symbol)}" data-company="${escapeHtml(s.companyName)}">
+                        <strong>${escapeHtml(s.symbol)}</strong> — ${escapeHtml(s.companyName)}
                     </div>`).join('');
         } catch (error) {
             els.searchResults.innerHTML = `<div class="stock-search-result-item" style="color:red">Error: ${error.message}</div>`;

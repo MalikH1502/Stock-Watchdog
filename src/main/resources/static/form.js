@@ -28,7 +28,10 @@
     async function fetchJson(url, opts = {}) {
         const { throwOnNotOk = true } = opts;
         const resp = await fetch(url);
-        if (!resp.ok && throwOnNotOk) throw new Error(`Request failed: ${resp.status}`);
+        if (!resp.ok && throwOnNotOk) {
+            const error = await resp.json().catch(() => ({}));
+            throw new Error(error.error || `Request failed: ${resp.status}`);
+        }
         return resp.json();
     }
 
@@ -43,7 +46,7 @@
 
     function escapeHtml(str) {
         const d = document.createElement('div');
-        d.textContent = str;
+        d.textContent = String(str ?? '');
         return d.innerHTML;
     }
     function formatShortRelativeTime(isoString) {
@@ -80,11 +83,12 @@
     function buildStockCardsHtml(data) {
         return data.map(stock => `
         <div class="stock-card" data-id="${stock.id}">
-            <span class="symbol">${stock.symbol}</span>
-            <span class="company-name">${stock.companyName ?? ''}</span>
+            <span class="symbol">${escapeHtml(stock.symbol)}</span>
+            <span class="company-name">${escapeHtml(stock.companyName)}</span>
             <div class="meta">
-                <span class="badge badge-type">${stock.type ?? ''}</span>
-<span class="badge">${getRegionFlag(stock.region)} ${stock.region ?? ''}</span>            </div>${buildPriceBlockHtml(stock)}
+                <span class="badge badge-type">${escapeHtml(stock.type)}</span>
+                <span class="badge">${getRegionFlag(stock.region)} ${escapeHtml(stock.region)}</span>
+            </div>${buildPriceBlockHtml(stock)}
         </div>
     `).join('');
     }
@@ -161,7 +165,7 @@
         const url = `/api/stocks/search?${searchParams}`;
 
         try {
-            const data = await fetchJson(url, { throwOnNotOk: false });
+            const data = await fetchJson(url);
 
             if (Array.isArray(data)) {
                 els.resultsContainer.innerHTML = data.length === 0

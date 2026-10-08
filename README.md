@@ -1,122 +1,86 @@
-# 📈 StockWatchdog
-A Spring Boot REST API for monitoring stocks, managing watchlists, and setting price alerts.
+# StockWatchdog
 
----
+StockWatchdog is a Spring Boot web application for searching stocks, viewing cached quotes, and creating browser-evaluated price alerts.
+
+**Live demo:** _Add the deployed HTTPS URL here once the hosted environment is configured._
 
 ## Features
-- View and manage a list of tracked stocks
-- Add stocks to a personal watchlist
-- Create price alerts (trigger when a stock goes above or below a target value)
-- User account management
-- Historical price tracking per stock
 
----
+- Search Alpha Vantage symbols and cache discovered stocks in PostgreSQL.
+- Refresh a stock quote when its cached price is older than five minutes.
+- Create and manage alerts for prices above or below a target.
+- Session-based login with BCrypt password hashing and Spring Security CSRF protection.
+- Redis-backed HTTP sessions.
 
-## Tech Stack
-| Layer | Technology |
-|---|---|
-| Language | Java |
-| Framework | Spring Boot |
-| Persistence | Spring Data JPA |
-| Database | Configurable via `application.properties` |
-| Boilerplate reduction | Lombok (`@Data`, `@NoArgsConstructor`) |
+## Screenshots
 
----
+Add current screenshots of the dashboard, alerts page, and login flow here before sharing this project publicly.
 
-## Project Structure
-```
-src/main/java/com/malikh/StockWatchdog/
-│
-├── controller/
-│   └── MyController.java          # REST endpoints
-│
-├── dto/
-│   ├── AlertDTO.java              # Alert response object (no sensitive fields)
-│   ├── StockDTO.java              # Stock response object
-│   ├── UserDTO.java               # User response object (no password)
-│   └── WatchlistEntryDTO.java     # Watchlist response object
-│
-├── mapper/
-│   ├── AlertMapper.java           # Maps Alert entity to AlertDTO
-│   ├── StockMapper.java           # Maps Stock entity to StockDTO
-│   ├── UserMapper.java            # Maps User entity to UserDTO
-│   └── WatchlistEntryMapper.java  # Maps WatchlistEntry entity to WatchlistEntryDTO
-│
-├── entity/
-│   ├── Alert.java                 # Price alert with ABOVE/BELOW condition
-│   ├── History.java               # Historical price record for a stock
-│   ├── Stock.java                 # Stock symbol + company name
-│   ├── User.java                  # Application user
-│   └── WatchlistEntry.java        # Many-to-many join: User <-> Stock
-│
-├── repository/
-│   ├── AlertRepository.java
-│   ├── StockRepository.java
-│   ├── UserRepository.java
-│   └── WatchlistRepository.java
-│
-├── service/
-│   ├── AlertService.java
-│   ├── StockService.java
-│   ├── UserService.java
-│   └── WatchlistService.java
-│
-└── StockWatchdogApplication.java
-```
+## Tech stack
 
----
+- Java 17+
+- Spring Boot 4
+- Spring Security and Spring Session Data Redis
+- Spring Data JPA with PostgreSQL
+- Alpha Vantage market data
+- Maven Wrapper
 
-## API Endpoints
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/stocks` | Get all stocks |
-| `GET` | `/api/stocks/{symbol}` | Get a specific stock by symbol |
-| `POST` | `/api/stocks` | Create a new stock |
-| `POST` | `/api/watchlist` | Add a stock to a user's watchlist |
-| `POST` | `/api/alerts` | Create a price alert |
-| `POST` | `/api/users` | Create a new user |
-
----
-
-## Data Model Overview
-```
-User ──< WatchlistEntry >── Stock
- │                            │
- └──< Alert >────────────────┘
-                   │
-                History
-```
-- A **User** can have many **WatchlistEntries** and many **Alerts**
-- A **Stock** can appear in many watchlists and have many alerts and history records
-- An **Alert** fires when a stock's price goes `ABOVE` or `BELOW` a set value
-
----
-
-## Getting Started
+## Running locally
 
 ### Prerequisites
-- Java 17+
-- Maven
-- A running database (configure in `application.properties`)
 
-### Run
-```bash
-mvn spring-boot:run
+- Java 17 or newer
+- PostgreSQL
+- Redis
+- An Alpha Vantage API key
+
+Set these environment variables before starting the application:
+
+```text
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/stockwatchdog
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=your-password
+ALPHA_VANTAGE_API_KEY=your-key
 ```
 
-### Configuration
-Edit `src/main/resources/application.properties` to set your database connection:
-```properties
-spring.datasource.url=jdbc:your-db-url
-spring.datasource.username=your-username
-spring.datasource.password=your-password
-spring.jpa.hibernate.ddl-auto=update
+For a local HTTP session cookie, `SESSION_COOKIE_SECURE` can remain unset. Set it to `true` whenever the application is served over HTTPS:
+
+```text
+SESSION_COOKIE_SECURE=true
 ```
 
----
+Start the application with the Maven Wrapper:
 
-## Known Limitations / TODO
-- [ ] No authentication or authorization
-- [ ] No input validation on endpoints
-- [ ] Alert evaluation logic not yet implemented
-- [ ] History population requires an external data source integration
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+Open `http://localhost:8080/signup.html` to create an account.
+
+## API summary
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/csrf` | Get the CSRF token used by browser forms |
+| `POST` | `/api/signup` | Register a user and redirect to the login page |
+| `POST` | `/api/login` | Authenticate a user and create a session |
+| `POST` | `/api/logout` | End the current session |
+| `GET` | `/api/stocks/search?query=...` | Search Alpha Vantage symbols |
+| `GET` | `/api/stocks/{id}` | View a stock and refresh its cached quote when stale |
+| `GET` | `/api/alerts` | List alerts for the authenticated user |
+| `POST` | `/api/alerts` | Create an alert |
+| `DELETE` | `/api/alerts/{id}` | Delete an alert |
+| `GET` | `/api/help` | List help articles |
+
+## Data and deployment requirements
+
+The deployed service requires hosted PostgreSQL and Redis. Spring Session stores sessions in Redis, so the application will not be fully functional without both services. The deployment host must provide the environment variables above; secrets should not be committed to `application.properties`.
+
+For HTTPS deployments, configure TLS at the host or reverse proxy and set `SESSION_COOKIE_SECURE=true`. SQL logging is disabled by default; set `SPRING_JPA_SHOW_SQL=true` only while diagnosing a local issue.
+
+## Known limitations
+
+- Alpha Vantage's free tier allows 25 requests per day shared across searches and quotes. When the limit is reached, searches show a clear error and stock detail pages continue serving the last cached quote.
+- Alerts are evaluated client-side while an authenticated StockWatch page is open; they are not evaluated while the site is closed.
+- Watchlist persistence exists in the API, but the watchlist page is unfinished and is intentionally not linked from the application navigation.
+- Quote freshness depends on the external Alpha Vantage service and the last successful refresh.

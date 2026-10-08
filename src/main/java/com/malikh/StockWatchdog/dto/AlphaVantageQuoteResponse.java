@@ -11,6 +11,12 @@ public class AlphaVantageQuoteResponse {
     @JsonProperty("Global Quote")
     private GlobalQuote globalQuote;
 
+    @JsonProperty("Note")
+    private String note;
+
+    @JsonProperty("Information")
+    private String information;
+
     @Data
     @NoArgsConstructor
     public static class GlobalQuote {
